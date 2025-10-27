@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:customer="clr-namespace:spareParts.PageViews.Customer"
+            xmlns:auth="clr-namespace:spareParts.PageViews.Authentication"
+            x:Class="spareParts.PageViews.MainTabbedPage"
+            Title="SpareParts"
+            BarBackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#2C3E50}"
+            BarTextColor="{AppThemeBinding Light=#6C757D, Dark=#BDC3C7}"
+            SelectedTabColor="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
+            UnselectedTabColor="{AppThemeBinding Light=#ADB5BD, Dark=#7F8C8D}">
+
+    <TabbedPage.Resources>
+        <ResourceDictionary>
+            <!-- Responsive styles for different screen sizes -->
+            <Style x:Key="ResponsiveTabStyle" TargetType="TabbedPage">
+                <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light=#F8F9FA, Dark=#2C3E50}" />
+                <Setter Property="BarTextColor" Value="{AppThemeBinding Light=#6C757D, Dark=#BDC3C7}" />
+                <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}" />
+                <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light=#ADB5BD, Dark=#7F8C8D}" />
+            </Style>
+            
+            <!-- Platform-specific adjustments -->
+            <OnPlatform x:Key="TabBarHeight" x:TypeArguments="x:Double">
+                <On Platform="iOS" Value="83" />
+                <On Platform="Android" Value="56" />
+                <On Platform="WinUI" Value="48" />
+            </OnPlatform>
+            
+            <OnPlatform x:Key="TabIconSize" x:TypeArguments="x:Double">
+                <On Platform="iOS" Value="28" />
+                <On Platform="Android" Value="24" />
+                <On Platform="WinUI" Value="20" />
+            </OnPlatform>
+        </ResourceDictionary>
+    </TabbedPage.Resources>
+
+    <!-- Home Tab -->
+    <NavigationPage Title="Home">
+        <NavigationPage.IconImageSource>
+            <FontImageSource Glyph="🏠" 
+                           FontFamily="Default" 
+                           Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
+                           Size="{StaticResource TabIconSize}" />
+        </NavigationPage.IconImageSource>
+        <x:Arguments>
+            <customer:HomePage />
+        </x:Arguments>
+    </NavigationPage>
+
+    <!-- Profile Tab -->
+    <NavigationPage Title="Profile">
+        <NavigationPage.IconImageSource>
+            <FontImageSource Glyph="👤" 
+                           FontFamily="Default" 
+                           Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
+                           Size="{StaticResource TabIconSize}" />
+        </NavigationPage.IconImageSource>
+        <x:Arguments>
+            <customer:ProfilePage />
+        </x:Arguments>
+    </NavigationPage>
+
+    <!-- Cart Tab -->
+    <NavigationPage Title="Cart">
+        <NavigationPage.IconImageSource>
+            <FontImageSource Glyph="🛒" 
+                           FontFamily="Default" 
+                           Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
+                           Size="{StaticResource TabIconSize}" />
+        </NavigationPage.IconImageSource>
+        <x:Arguments>
+            <customer:CartPage />
+        </x:Arguments>
+    </NavigationPage>
+
+</TabbedPage>

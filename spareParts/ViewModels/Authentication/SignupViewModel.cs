@@ -108,8 +108,11 @@ namespace spareParts.ViewModels.Authentication
                     
                     await Application.Current.MainPage.DisplayAlert("Success", "Account created successfully!", "OK");
                     
-                    // Navigate back to home page
-                    await Application.Current.MainPage.Navigation.PopAsync();
+                    // Navigate to main app
+                    if (Application.Current is App app)
+                    {
+                        app.NavigateToMainApp();
+                    }
                 }
                 else
                 {

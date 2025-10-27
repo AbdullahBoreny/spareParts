@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:spareParts.Converters"
+             xmlns:services="clr-namespace:spareParts.Services"
              x:Class="spareParts.PageViews.Customer.CartPage"
              Title="Shopping Cart">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <!-- Authentication Check -->
+        <VerticalStackLayout IsVisible="{Binding Source={x:Static services:AuthenticationStateService.Instance}, Path=IsAuthenticated, Converter={StaticResource InvertBoolConverter}}"
+                             Spacing="20"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Margin="20">
+            <Image Source="cart_icon.png"
+                   WidthRequest="80"
+                   HeightRequest="80"
+                   HorizontalOptions="Center" />
+            <Label Text="Please Sign In"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#E74C3C"
+                   HorizontalOptions="Center" />
+            <Label Text="Sign in to view your shopping cart and make purchases."
+                   FontSize="14"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center" />
+            <Button Text="Go to Home to Sign In"
+                    BackgroundColor="#3498DB"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="45"
+                    WidthRequest="200"
+                    FontSize="16"
+                    x:Name="GoToHomeButton" />
+        </VerticalStackLayout>
         
-        <CollectionView Grid.Row="0" x:Name="CartItemsCollection">
+        <!-- Cart Content (Visible when authenticated) -->
+        <Grid IsVisible="{Binding Source={x:Static services:AuthenticationStateService.Instance}, Path=IsAuthenticated}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <CollectionView Grid.Row="0" x:Name="CartItemsCollection">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10">
@@ -92,8 +132,9 @@
                         CornerRadius="8" 
                         HeightRequest="50" 
                         Margin="0,10,0,0" />
-            </Grid>
-        </Frame>
+                </Grid>
+            </Frame>
+        </Grid>
     </Grid>
 
 </ContentPage>

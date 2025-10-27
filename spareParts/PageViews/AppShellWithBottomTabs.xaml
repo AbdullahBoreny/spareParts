@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:customer="clr-namespace:spareParts.PageViews.Customer"
+       x:Class="spareParts.PageViews.AppShellWithBottomTabs"
+       Title="SpareParts"
+       FlyoutBehavior="Disabled">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!-- Tab Bar Styling -->
+            <Style x:Key="BaseShellItemStyle" TargetType="ShellItem">
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light=#F8F9FA, Dark=#2C3E50}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Light=#6C757D, Dark=#BDC3C7}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light=#6C757D, Dark=#BDC3C7}" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light=#ADB5BD, Dark=#7F8C8D}" />
+            </Style>
+            
+            <!-- Platform-specific icon sizes -->
+            <OnPlatform x:Key="TabIconSize" x:TypeArguments="x:Double">
+                <On Platform="iOS" Value="28" />
+                <On Platform="Android" Value="24" />
+                <On Platform="WinUI" Value="20" />
+            </OnPlatform>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Home Tab -->
+    <TabBar>
+        <ShellContent Title="Home"
+                      Icon="home_icon.png"
+                      ContentTemplate="{DataTemplate customer:HomePage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="🏠" 
+                               FontFamily="Default" 
+                               Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
+                               Size="{StaticResource TabIconSize}" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+        <ShellContent Title="Profile"
+                      Icon="profile_icon.png"
+                      ContentTemplate="{DataTemplate customer:ProfilePage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="👤" 
+                               FontFamily="Default" 
+                               Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
+                               Size="{StaticResource TabIconSize}" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+        <ShellContent Title="Cart"
+                      Icon="cart_icon.png"
+                      ContentTemplate="{DataTemplate customer:CartPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="🛒" 
+                               FontFamily="Default" 
+                               Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
+                               Size="{StaticResource TabIconSize}" />
+            </ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
+
+</Shell>
