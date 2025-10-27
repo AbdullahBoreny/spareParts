@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:spareParts.ViewModels.Authentication"
+             x:Class="spareParts.PageViews.Authentication.SignupPage"
+             x:DataType="viewmodels:SignupViewModel"
+             Title="Sign Up">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30">
+            <!-- Header -->
+            <VerticalStackLayout Spacing="10" Margin="0,30,0,20">
+                <Label Text="Create Account" 
+                       FontSize="32" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" 
+                       TextColor="#2C3E50" />
+                
+                <Label Text="Join SpareParts today and start shopping!" 
+                       FontSize="16" 
+                       HorizontalOptions="Center" 
+                       TextColor="Gray" />
+            </VerticalStackLayout>
+            
+            <!-- Signup Form -->
+            <Frame BackgroundColor="White" 
+                   HasShadow="True" 
+                   CornerRadius="15" 
+                   Padding="25">
+                <VerticalStackLayout Spacing="20">
+                    <Entry Placeholder="Full Name" 
+                           Text="{Binding Name}"
+                           FontSize="16"
+                           BackgroundColor="#F8F9FA"
+                           PlaceholderColor="Gray" />
+                    
+                    <Entry Placeholder="Email Address" 
+                           Text="{Binding Email}"
+                           Keyboard="Email" 
+                           FontSize="16"
+                           BackgroundColor="#F8F9FA"
+                           PlaceholderColor="Gray" />
+                    
+                    <Entry Placeholder="Password" 
+                           Text="{Binding Password}"
+                           IsPassword="True" 
+                           FontSize="16"
+                           BackgroundColor="#F8F9FA"
+                           PlaceholderColor="Gray" />
+                    
+                    <Entry Placeholder="Confirm Password" 
+                           Text="{Binding ConfirmPassword}"
+                           IsPassword="True" 
+                           FontSize="16"
+                           BackgroundColor="#F8F9FA"
+                           PlaceholderColor="Gray" />
+                    
+                    <Button Text="Create Account" 
+                            Command="{Binding SignupCommand}"
+                            BackgroundColor="#27AE60" 
+                            TextColor="White" 
+                            CornerRadius="10" 
+                            HeightRequest="50" 
+                            FontSize="16"
+                            FontAttributes="Bold" />
+                    
+                    <ActivityIndicator IsVisible="{Binding IsLoading}" 
+                                       IsRunning="{Binding IsLoading}" 
+                                       Color="#27AE60" 
+                                       HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Sign In Link -->
+            <StackLayout Orientation="Horizontal" 
+                         HorizontalOptions="Center" 
+                         Spacing="5">
+                <Label Text="Already have an account?" 
+                       TextColor="Gray" 
+                       FontSize="14" />
+                <Button Text="Sign In" 
+                        Command="{Binding NavigateToLoginCommand}"
+                        BackgroundColor="Transparent" 
+                        TextColor="#3498DB" 
+                        FontSize="14"
+                        FontAttributes="Bold" />
+            </StackLayout>
+            
+            <!-- Terms and Conditions -->
+            <Label Text="By creating an account, you agree to our Terms of Service and Privacy Policy" 
+                   FontSize="12" 
+                   TextColor="Gray" 
+                   HorizontalOptions="Center" 
+                   HorizontalTextAlignment="Center"
+                   Margin="0,20,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

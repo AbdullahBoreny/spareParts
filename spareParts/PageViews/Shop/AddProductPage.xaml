@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="spareParts.PageViews.Shop.AddProductPage"
+             Title="Add Product">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <Label Text="Add New Product" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+            
+            <Frame BackgroundColor="White" 
+                   HasShadow="True" 
+                   CornerRadius="10" 
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Product Information" 
+                           FontSize="18" 
+                           FontAttributes="Bold" />
+                    
+                    <Entry Placeholder="Product Name" 
+                           x:Name="ProductNameEntry" />
+                    
+                    <Editor Placeholder="Product Description" 
+                            x:Name="DescriptionEditor" 
+                            HeightRequest="100" />
+                    
+                    <Entry Placeholder="Price" 
+                           x:Name="PriceEntry" 
+                           Keyboard="Numeric" />
+                    
+                    <Entry Placeholder="Category" 
+                           x:Name="CategoryEntry" />
+                    
+                    <Entry Placeholder="Stock Quantity" 
+                           x:Name="StockEntry" 
+                           Keyboard="Numeric" />
+                    
+                    <Label Text="Product Image" 
+                           FontSize="16" 
+                           FontAttributes="Bold" />
+                    
+                    <Button Text="Select Image" 
+                            BackgroundColor="LightBlue" 
+                            TextColor="Blue" 
+                            CornerRadius="8" 
+                            HeightRequest="45" 
+                            x:Name="SelectImageButton" />
+                    
+                    <Image x:Name="SelectedImage" 
+                           HeightRequest="150" 
+                           BackgroundColor="LightGray" 
+                           Aspect="AspectFit" />
+                    
+                    <Button Text="Add Product" 
+                            BackgroundColor="Green" 
+                            TextColor="White" 
+                            CornerRadius="8" 
+                            HeightRequest="50" 
+                            x:Name="AddProductButton" />
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

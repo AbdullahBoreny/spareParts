@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="spareParts.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:spareParts"
-    Title="spareParts">
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:spareParts.PageViews.Customer"
+       xmlns:auth="clr-namespace:spareParts.PageViews.Authentication"
+       x:Class="spareParts.AppShell">
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        ContentTemplate="{DataTemplate views:HomePage}"
+        Route="HomePage" />
+
+    <!-- Register routes for navigation -->
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate auth:LoginPage}"
+        Route="LoginPage" />
+
+    <ShellContent
+        Title="Signup"
+        ContentTemplate="{DataTemplate auth:SignupPage}"
+        Route="SignupPage" />
 
 </Shell>

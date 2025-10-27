@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:spareParts.Converters"
+             x:Class="spareParts.PageViews.Customer.ShopDetailsPage"
+             Title="Shop Details">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToStatusConverter x:Key="BoolToStatusConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <!-- Shop Header -->
+            <Frame BackgroundColor="#3498DB" 
+                   HasShadow="True" 
+                   CornerRadius="15" 
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Frame Grid.Column="0" 
+                               BackgroundColor="White" 
+                               CornerRadius="25" 
+                               WidthRequest="50" 
+                               HeightRequest="50" 
+                               Padding="0">
+                            <Image Source="shop_icon.png" 
+                                   WidthRequest="40" 
+                                   HeightRequest="40" />
+                        </Frame>
+                        
+                        <VerticalStackLayout Grid.Column="1" 
+                                             Margin="15,0,0,0">
+                            <Label Text="{Binding Name}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold" 
+                                   TextColor="White" 
+                                   LineBreakMode="WordWrap" 
+                                   MaxLines="2" />
+                            <Label Text="{Binding Address}" 
+                                   FontSize="12" 
+                                   TextColor="LightBlue" 
+                                   LineBreakMode="WordWrap" 
+                                   MaxLines="2" />
+                        </VerticalStackLayout>
+                        
+                        <Label Grid.Column="2" 
+                               Text="{Binding IsActive, Converter={StaticResource BoolToStatusConverter}}" 
+                               FontSize="12" 
+                               TextColor="LightGreen" 
+                               VerticalOptions="Center" />
+                    </Grid>
+                    
+                    <Label Text="{Binding Description}" 
+                           FontSize="14" 
+                           TextColor="White" 
+                           LineBreakMode="WordWrap" 
+                           MaxLines="4" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Shop Stats -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Frame Grid.Column="0" 
+                       BackgroundColor="White" 
+                       HasShadow="True" 
+                       CornerRadius="10" 
+                       Padding="15">
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Label Text="{Binding ProductCount}" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#2C3E50" 
+                               HorizontalOptions="Center" />
+                        <Label Text="Products" 
+                               FontSize="10" 
+                               TextColor="Gray" 
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <Frame Grid.Column="1" 
+                       BackgroundColor="White" 
+                       HasShadow="True" 
+                       CornerRadius="10" 
+                       Padding="15" 
+                       Margin="10,0">
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Label Text="{Binding Rating}" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#F39C12" 
+                               HorizontalOptions="Center" />
+                        <Label Text="Rating" 
+                               FontSize="10" 
+                               TextColor="Gray" 
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <Frame Grid.Column="2" 
+                       BackgroundColor="White" 
+                       HasShadow="True" 
+                       CornerRadius="10" 
+                       Padding="15">
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Label Text="{Binding Distance}" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#27AE60" 
+                               HorizontalOptions="Center" />
+                        <Label Text="km away" 
+                               FontSize="10" 
+                               TextColor="Gray" 
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+            
+            <!-- Contact Information -->
+            <Frame BackgroundColor="White" 
+                   HasShadow="True" 
+                   CornerRadius="15" 
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Contact Information" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#2C3E50" />
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Label Grid.Row="0" Grid.Column="0" 
+                               Text="📞" 
+                               FontSize="16" 
+                               VerticalOptions="Center" />
+                        <Label Grid.Row="0" Grid.Column="1" 
+                               Text="{Binding Phone}" 
+                               FontSize="14" 
+                               TextColor="Black"
+                               VerticalOptions="Center" 
+                               Margin="10,0,0,0" 
+                               LineBreakMode="TailTruncation" />
+                        <Button Grid.Row="0" Grid.Column="2" 
+                                Text="Call" 
+                                Margin="10"
+                                BackgroundColor="#3498DB" 
+                                TextColor="White" 
+                                CornerRadius="5" 
+                                HeightRequest="40" 
+                                WidthRequest="60" 
+                                FontSize="11"
+                                
+                                Clicked="OnCallClicked" />
+                        
+                        <Label Grid.Row="1" Grid.Column="0" 
+                               Text="✉️" 
+                               FontSize="16" 
+                               VerticalOptions="Center" />
+                        <Label Grid.Row="1" Grid.Column="1" 
+                               Text="{Binding Email}" 
+                               FontSize="14" 
+                               TextColor="Black"
+                               VerticalOptions="Center" 
+                               Margin="10,0,0,0" 
+                               LineBreakMode="TailTruncation" />
+                        <Button Grid.Row="1" Grid.Column="2" 
+                                Text="Email" 
+                                 Margin="10"
+                                BackgroundColor="#27AE60" 
+                                TextColor="White" 
+                                CornerRadius="5" 
+                                HeightRequest="40" 
+                                WidthRequest="60"
+                                FontSize="11"
+                                Clicked="OnEmailClicked" />
+                        
+                        <Label Grid.Row="2" Grid.Column="0" 
+                               Text="📍" 
+                               FontSize="16" 
+                               
+                               VerticalOptions="Center" />
+                        <Label Grid.Row="2" Grid.Column="1" 
+                               Text="{Binding Address}" 
+                               FontSize="14" 
+                               TextColor="Black"
+                               VerticalOptions="Center" 
+                               Margin="10,0,0,0" 
+                               LineBreakMode="WordWrap" 
+                               MaxLines="2" />
+                        <Button Grid.Row="2" Grid.Column="2" 
+                                Text="Map" 
+                                 Margin="10"
+                                BackgroundColor="#E74C3C" 
+                                TextColor="White" 
+                                CornerRadius="5" 
+                                HeightRequest="40" 
+                                WidthRequest="60" 
+                                FontSize="11"
+                                Clicked="OnMapClicked" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Featured Products -->
+            <Frame BackgroundColor="White" 
+                   HasShadow="True" 
+                   CornerRadius="15" 
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Featured Products" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#2C3E50" />
+                    
+                    <CollectionView ItemsSource="{Binding FeaturedProducts}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10">
+                                    <Frame BackgroundColor="#F8F9FA" 
+                                           CornerRadius="10" 
+                                           Padding="15">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <VerticalStackLayout Grid.Column="0">
+                                                <Label Text="{Binding Name}" 
+                                                       FontSize="16" 
+                                                       FontAttributes="Bold" 
+                                                       TextColor="#2C3E50" />
+                                                <Label Text="{Binding Price, StringFormat='${0:F2}'}" 
+                                                       FontSize="18" 
+                                                       FontAttributes="Bold" 
+                                                       TextColor="#27AE60" 
+                                                       Margin="0,5,0,0" />
+                                            </VerticalStackLayout>
+                                            
+                                            <Button Grid.Column="1"
+                                                    Text="View" 
+                                                    BackgroundColor="#3498DB" 
+                                                    TextColor="White" 
+                                                    CornerRadius="5" 
+                                                    HeightRequest="35" 
+                                                    WidthRequest="70" 
+                                                    FontSize="12" />
+                                        </Grid>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="0" 
+                        Text="Browse Products" 
+                        BackgroundColor="#3498DB" 
+                        TextColor="White" 
+                        CornerRadius="10" 
+                        HeightRequest="45" 
+                        FontSize="14" 
+                        FontAttributes="Bold" 
+                        Margin="0,0,5,0"
+                        Clicked="OnBrowseProductsClicked" />
+                
+                <Button Grid.Column="1" 
+                        Text="Visit Shop" 
+                        BackgroundColor="#27AE60" 
+                        TextColor="White" 
+                        CornerRadius="10" 
+                        HeightRequest="45" 
+                        FontSize="14" 
+                        FontAttributes="Bold" 
+                        Margin="5,0,0,0"
+                        Clicked="OnVisitShopClicked" />
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
