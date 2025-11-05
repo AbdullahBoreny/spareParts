@@ -5,11 +5,7 @@
        xmlns:auth="clr-namespace:spareParts.PageViews.Authentication"
        x:Class="spareParts.AppShell">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:HomePage}"
-        Route="HomePage" />
-
+   
     <!-- Register routes for navigation -->
     <ShellContent
         Title="Login"
@@ -20,5 +16,10 @@
         Title="Signup"
         ContentTemplate="{DataTemplate auth:SignupPage}"
         Route="SignupPage" />
+    <ShellContent
+     Title="Home"
+     ContentTemplate="{DataTemplate views:HomePage}"
+     Route="HomePage" />
+
 
 </Shell>
