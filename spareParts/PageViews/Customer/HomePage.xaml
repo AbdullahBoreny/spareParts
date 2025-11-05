@@ -98,15 +98,7 @@
                                    TextColor="LightBlue" />
                         </VerticalStackLayout>
                         
-                        <Button Grid.Column="1" 
-                                Text="Logout" 
-                                BackgroundColor="#E74C3C" 
-                                TextColor="White" 
-                                CornerRadius="5" 
-                                HeightRequest="35" 
-                                WidthRequest="70" 
-                                FontSize="12"
-                                x:Name="LogoutButton" />
+                      
                     </Grid>
                 </Frame>
             </StackLayout>
@@ -234,7 +226,7 @@
                                     <!-- Featured Products Preview -->
                                     <Frame Grid.Row="3" 
                                            BackgroundColor="#F8F9FA" 
-                                           CornerRadius="0,0,12,12" 
+                                            
                                            Padding="15,10">
                                         <VerticalStackLayout>
                                             <Label Text="Featured Products:" 

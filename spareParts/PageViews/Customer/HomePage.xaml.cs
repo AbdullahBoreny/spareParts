@@ -1,6 +1,5 @@
-using Microsoft.Maui.Controls;
-using spareParts.PageViews.Authentication;
 using spareParts.Models;
+using spareParts.PageViews.Authentication;
 using spareParts.Services;
 using System.Collections.ObjectModel;
 
@@ -14,20 +13,20 @@ namespace spareParts.PageViews.Customer
         public HomePage()
         {
             InitializeComponent();
-            
+
             _authService = AuthenticationStateService.Instance;
-            
+
             // Set up button click events
             LoginButton.Clicked += async (s, e) => await Navigation.PushAsync(new LoginPage());
             SignupButton.Clicked += async (s, e) => await Navigation.PushAsync(new SignupPage());
-            LogoutButton.Clicked += OnLogoutClicked;
-            
+
+
             // Load sample shop data
             LoadSampleShops();
-            
+
             // Subscribe to authentication state changes
             _authService.PropertyChanged += OnAuthenticationStateChanged;
-            
+
             // Update UI based on current authentication state
             UpdateUIBasedOnAuthState();
         }
@@ -59,12 +58,12 @@ namespace spareParts.PageViews.Customer
         private void UpdateUIBasedOnAuthState()
         {
             bool isAuthenticated = _authService.IsAuthenticated;
-            
+
             // Show/hide sections based on authentication state
             AuthenticationSection.IsVisible = !isAuthenticated;
             UserInfoSection.IsVisible = isAuthenticated;
             ShopsSection.IsVisible = isAuthenticated;
-            
+
             if (isAuthenticated)
             {
                 // Update user info
@@ -95,13 +94,13 @@ namespace spareParts.PageViews.Customer
             if (sender is Button button && button.BindingContext is ShopWithProducts shop)
             {
                 var action = await Application.Current.MainPage.DisplayActionSheet(
-                    "Contact Shop", 
-                    "Cancel", 
-                    null, 
-                    "Call", 
-                    "Email", 
+                    "Contact Shop",
+                    "Cancel",
+                    null,
+                    "Call",
+                    "Email",
                     "Get Directions");
-                
+
                 switch (action)
                 {
                     case "Call":
