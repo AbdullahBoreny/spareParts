@@ -63,8 +63,7 @@
                          HorizontalOptions="Center" 
                          Spacing="5">
                 <Label Text="Don't have an account?" 
-                       TextColor="Gray"
-                      Margin="10"
+                       TextColor="Gray" 
                        FontSize="14" />
                 <Button Text="Sign Up" 
                         Command="{Binding NavigateToSignupCommand}"

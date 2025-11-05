@@ -1,60 +1,31 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace spareParts.Services
 {
     public class AuthService
     {
-        private const string UsersKey = "RegisteredUsers";
-
-        private async Task<Dictionary<string, string>> GetUsersAsync()
+        public async Task<bool> LoginAsync(string email, string password)
         {
-            // Get saved users from Preferences
-            if (Preferences.ContainsKey(UsersKey))
-            {
-                var json = Preferences.Get(UsersKey, string.Empty);
-                if (!string.IsNullOrEmpty(json))
-                    return JsonSerializer.Deserialize<Dictionary<string, string>>(json);
-            }
-
-            return new Dictionary<string, string>();
-        }
-
-        private async Task SaveUsersAsync(Dictionary<string, string> users)
-        {
-            var json = JsonSerializer.Serialize(users);
-            Preferences.Set(UsersKey, json);
-        }
-
-        // Register a new user
-        public async Task<bool> RegisterAsync(string email, string password, string name)
-        {
-            var users = await GetUsersAsync();
-
-            // Block duplicate registration
-            if (users.ContainsKey(email))
-                return false;
-
-            users[email] = password;
-            await SaveUsersAsync(users);
+            // TODO: Implement login logic
+            await Task.Delay(1000); // Simulate API call
             return true;
         }
 
-        // Login validation
-        public async Task<bool> LoginAsync(string email, string password)
+        public async Task<bool> RegisterAsync(string email, string password, string name)
         {
-            var users = await GetUsersAsync();
-
-            // Only allow login if user exists and password matches
-            if (users.ContainsKey(email) && users[email] == password)
-                return true;
-
-            return false;
+            // TODO: Implement registration logic
+            await Task.Delay(1000); // Simulate API call
+            return true;
         }
 
-        // Optional: clear all users (for testing)
-        public void ClearAllUsers()
+        public async Task LogoutAsync()
         {
-            Preferences.Remove(UsersKey);
+            // TODO: Implement logout logic
+            await Task.Delay(500);
         }
     }
 }
