@@ -28,7 +28,6 @@
     <!-- Home Tab -->
     <TabBar>
         <ShellContent Title="Home"
-                      Icon="home_icon.png"
                       ContentTemplate="{DataTemplate customer:HomePage}">
             <ShellContent.Icon>
                 <FontImageSource Glyph="🏠" 
@@ -39,7 +38,6 @@
         </ShellContent>
 
         <ShellContent Title="Profile"
-                      Icon="profile_icon.png"
                       ContentTemplate="{DataTemplate customer:ProfilePage}">
             <ShellContent.Icon>
                 <FontImageSource Glyph="👤" 
@@ -50,7 +48,6 @@
         </ShellContent>
 
         <ShellContent Title="Cart"
-                      Icon="cart_icon.png"
                       ContentTemplate="{DataTemplate customer:CartPage}">
             <ShellContent.Icon>
                 <FontImageSource Glyph="🛒" 

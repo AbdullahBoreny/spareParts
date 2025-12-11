@@ -37,41 +37,41 @@
 
     <!-- Home Tab -->
     <NavigationPage Title="Home">
+        <x:Arguments>
+            <customer:HomePage />
+        </x:Arguments>
         <NavigationPage.IconImageSource>
             <FontImageSource Glyph="🏠" 
                            FontFamily="Default" 
                            Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
                            Size="{StaticResource TabIconSize}" />
         </NavigationPage.IconImageSource>
-        <x:Arguments>
-            <customer:HomePage />
-        </x:Arguments>
     </NavigationPage>
 
     <!-- Profile Tab -->
     <NavigationPage Title="Profile">
+        <x:Arguments>
+            <customer:ProfilePage />
+        </x:Arguments>
         <NavigationPage.IconImageSource>
             <FontImageSource Glyph="👤" 
                            FontFamily="Default" 
                            Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
                            Size="{StaticResource TabIconSize}" />
         </NavigationPage.IconImageSource>
-        <x:Arguments>
-            <customer:ProfilePage />
-        </x:Arguments>
     </NavigationPage>
 
     <!-- Cart Tab -->
     <NavigationPage Title="Cart">
+        <x:Arguments>
+            <customer:CartPage />
+        </x:Arguments>
         <NavigationPage.IconImageSource>
             <FontImageSource Glyph="🛒" 
                            FontFamily="Default" 
                            Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
                            Size="{StaticResource TabIconSize}" />
         </NavigationPage.IconImageSource>
-        <x:Arguments>
-            <customer:CartPage />
-        </x:Arguments>
     </NavigationPage>
 
 </TabbedPage>
