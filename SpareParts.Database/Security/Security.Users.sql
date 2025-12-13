@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Security].[Users]
 (
-	[UserID]						INT IDENTITY NOT NULL,
+	[UserID]						UNIQUEIDENTIFIER NOT NULL,
 	[UserName]						NVARCHAR(100) NOT NULL,
 	[UserNameShort]					NVARCHAR(100) NOT NULL,
 	[UserEmail]						NVARCHAR(100) NOT NULL,
@@ -10,5 +10,5 @@
 	[UserCreationDate]				DATETIME NOT NULL,
 	[UserIsAuthenticated]			TINYINT	NOT NULL,
 
-CONSTRAINT [PK_Security_Users] PRIMARY KEY CLUSTERED ([UserID] ASC, [UserName] ASC, [UserEmail] ASC)
+CONSTRAINT [PK_Security_Users] PRIMARY KEY CLUSTERED ([UserID] ASC)
 );
