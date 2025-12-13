@@ -61,24 +61,44 @@
     <Folder Include="Sales" />
     <Folder Include="Schema" />
     <Folder Include="Communication" />
+    <Folder Include="Marketplace" />
+    <Folder Include="Lookup" />
+    <Folder Include="Lookup\General" />
+    <Folder Include="Lookup\Security" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Security\Security.Users.sql" />
-    <Build Include="Security\Security.Roles.sql" />
-    <Build Include="Security\Security.UserRole.sql" />
+    <Build Include="Security\Users.sql" />
+    <Build Include="Security\Roles.sql" />
+    <Build Include="Security\UserRole.sql" />
     <Build Include="Schema\Security.sql" />
     <Build Include="Schema\Sales.sql" />
     <Build Include="Schema\General.sql" />
-    <Build Include="Security\Security.UserToken.sql" />
-    <Build Include="General\General.Shops.sql" />
-    <Build Include="General\General.Inventory.sql" />
-    <Build Include="General\General.Products.sql" />
-    <Build Include="General\General.Categories.sql" />
-    <Build Include="Communication\Communication.Conversation.sql" />
-    <Build Include="Communication\Communication.Messages.sql" />
-    <Build Include="Sales\Sales.Transactions.sql" />
-    <Build Include="Sales\Sales.InvoiceHeader.sql" />
-    <Build Include="Sales\Sales.InvoiceDetail.sql" />
+    <Build Include="Security\UserToken.sql" />
+    <Build Include="General\Shops.sql" />
+    <Build Include="General\Inventory.sql" />
+    <Build Include="General\Products.sql" />
+    <Build Include="General\Categories.sql" />
+    <Build Include="Communication\Conversation.sql" />
+    <Build Include="Communication\Messages.sql" />
+    <Build Include="Sales\Transactions.sql" />
+    <Build Include="Sales\InvoiceHeader.sql" />
+    <Build Include="Sales\InvoiceDetail.sql" />
     <Build Include="Schema\Communication.sql" />
+    <Build Include="Schema\Marketplace.sql" />
+    <Build Include="Marketplace\Ads.sql" />
+    <Build Include="General\Conditions.sql" />
+    <Build Include="LookupScript.sql" />
+    <None Include="Lookup\General\Conditions.sql" />
+    <Build Include="Marketplace\AdsImages.sql" />
+    <Build Include="General\ProductBrands.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lookup\Security\Roles.sql" />
+    <None Include="Lookup\General\Categories.sql" />
+    <None Include="Lookup\General\ProductsBrands.sql" />
+    <None Include="SpareParts.publish.xml" />
   </ItemGroup>
 </Project>

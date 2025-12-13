@@ -2,7 +2,7 @@
 (
 	[RoleID]					INT NOT NULL,
 	[RoleName]					NVARCHAR(100) NOT NULL,
-	[RoleCreationDate]			DATETIME NOT NULL,
+	[RoleCreationDate]			DATETIME NOT NULL DEFAULT GETDATE(),
 
 CONSTRAINT [PK_Roles] PRIMARY KEY CLUSTERED ([RoleID] ASC)
 )
