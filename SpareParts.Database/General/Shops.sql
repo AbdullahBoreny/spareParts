@@ -1,4 +1,10 @@
-﻿CREATE TABLE [dbo].[Shops]
+﻿CREATE TABLE [General].[Shops]
 (
-	[Id] INT NOT NULL PRIMARY KEY
+	[ShopID]					UNIQUEIDENTIFIER NOT NULL,
+	[ShopName]					NVARCHAR(200) NOT NULL,
+	[ShopOwnerID]				UNIQUEIDENTIFIER NOT NULL,
+	[ShopLocation]				NVARCHAR(MAX) NOT NULL,
+	[ShopCreationDate]			DATETIME NOT NULL,
+
+CONSTRAINT [PK_Shops] PRIMARY KEY ([ShopID] ASC)
 )

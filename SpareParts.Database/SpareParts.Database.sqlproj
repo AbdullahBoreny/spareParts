@@ -80,9 +80,8 @@
     <Build Include="General\Categories.sql" />
     <Build Include="Communication\Conversation.sql" />
     <Build Include="Communication\Messages.sql" />
-    <Build Include="Sales\Transactions.sql" />
-    <Build Include="Sales\InvoiceHeader.sql" />
-    <Build Include="Sales\InvoiceDetail.sql" />
+    <Build Include="Sales\OrderHeader.sql" />
+    <Build Include="Sales\OrderDetail.sql" />
     <Build Include="Schema\Communication.sql" />
     <Build Include="Schema\Marketplace.sql" />
     <Build Include="Marketplace\Ads.sql" />
@@ -91,6 +90,7 @@
     <None Include="Lookup\General\Conditions.sql" />
     <Build Include="Marketplace\AdsImages.sql" />
     <Build Include="General\ProductBrands.sql" />
+    <Build Include="General\ShopCategories.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment.sql" />

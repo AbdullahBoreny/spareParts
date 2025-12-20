@@ -1,0 +1,13 @@
+﻿CREATE TABLE [Sales].[OrderHeader]
+(
+	[ShopID]			UNIQUEIDENTIFIER NOT NULL,
+	[UserID]			UNIQUEIDENTIFIER NOT NULL,
+	[OrderID]			UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+	[OrderNumber]		INT IDENTITY NOT NULL,
+	[OrderTotalVal]		NUMERIC(21,13) NOT NULL,
+	[OrderDate]			DATETIME NOT NULL,
+
+CONSTRAINT [PK_OrderHeader]	PRIMARY KEY ([ShopID] ASC, [UserID] ASC, [OrderID] ASC, [OrderNumber] ASC),
+CONSTRAINT [FK_OrderHeader_Shops] FOREIGN KEY (ShopID) REFERENCES [General].[Shops]([ShopID]),
+CONSTRAINT [FK_OrderHeader_Users] FOREIGN KEY (UserID) REFERENCES [Security].[Users]([UserID])
+)
