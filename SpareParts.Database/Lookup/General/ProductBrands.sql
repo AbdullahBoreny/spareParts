@@ -1,5 +1,5 @@
 ﻿EXEC LookupScript N'{
-	"table": "General.ProductsBrands",
+	"table": "General.ProductBrands",
 	"records":[
           {
             "BrandID": 1,

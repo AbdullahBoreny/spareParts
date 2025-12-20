@@ -98,7 +98,7 @@
   <ItemGroup>
     <None Include="Lookup\Security\Roles.sql" />
     <None Include="Lookup\General\Categories.sql" />
-    <None Include="Lookup\General\ProductsBrands.sql" />
+    <None Include="Lookup\General\ProductBrands.sql" />
     <None Include="SpareParts.publish.xml" />
   </ItemGroup>
 </Project>
