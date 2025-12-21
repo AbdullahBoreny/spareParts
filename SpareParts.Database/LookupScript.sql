@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[LookupScript] (@LookupJson NVARCHAR(MAX))
 AS
-
 BEGIN
     SET NOCOUNT ON;
 
@@ -8,39 +7,25 @@ BEGIN
         @TableName SYSNAME,
         @SchemaName SYSNAME,
         @PureTable SYSNAME,
-        @KeyColumn SYSNAME,
         @ColumnList NVARCHAR(MAX),
         @UpdateList NVARCHAR(MAX),
         @WithClause NVARCHAR(MAX),
+        @JoinClause NVARCHAR(MAX),
         @Sql NVARCHAR(MAX);
 
-    -- Read table name from JSON
     SELECT @TableName = JSON_VALUE(@LookupJson, '$.table');
 
-    -- Parse schema.table
     SET @SchemaName = PARSENAME(@TableName, 2);
     SET @PureTable  = PARSENAME(@TableName, 1);
     IF @SchemaName IS NULL SET @SchemaName = 'dbo';
 
-    -- Detect primary key column
-    SELECT TOP 1
-        @KeyColumn = c.name
-    FROM sys.indexes i
-    INNER JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id
-    INNER JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id
-    WHERE i.object_id = OBJECT_ID(QUOTENAME(@SchemaName) + '.' + QUOTENAME(@PureTable))
-      AND i.is_primary_key = 1;
-
-    IF @KeyColumn IS NULL
-        THROW 50001, 'Table does not have a primary key', 1;
-
-    -- Build column list from table (exclude identity columns)
-    SELECT
-        @ColumnList = STRING_AGG(QUOTENAME(c.name), ','),
+    SELECT 
+        @JoinClause = STRING_AGG('target.' + QUOTENAME(c.name) + ' = source.' + QUOTENAME(c.name), ' AND '),
         @UpdateList = STRING_AGG(
-            'target.' + QUOTENAME(c.name) + ' = source.' + QUOTENAME(c.name),
+            CASE WHEN ic.column_id IS NULL THEN 'target.' + QUOTENAME(c.name) + ' = source.' + QUOTENAME(c.name) END, 
             ', '
         ),
+        @ColumnList = STRING_AGG(QUOTENAME(c.name), ','),
         @WithClause = STRING_AGG(
             QUOTENAME(c.name) + ' ' +
             TYPE_NAME(c.user_type_id) +
@@ -54,17 +39,19 @@ BEGIN
             ',' + CHAR(10)
         )
     FROM sys.columns c
+    LEFT JOIN sys.index_columns ic 
+        ON ic.object_id = c.object_id 
+        AND ic.column_id = c.column_id
+        AND EXISTS (SELECT 1 FROM sys.indexes i WHERE i.object_id = ic.object_id AND i.index_id = ic.index_id AND i.is_primary_key = 1)
     WHERE c.object_id = OBJECT_ID(QUOTENAME(@SchemaName) + '.' + QUOTENAME(@PureTable))
       AND c.is_identity = 0;
 
-    -- Remove key column from update list
-    SET @UpdateList = REPLACE(
-        @UpdateList,
-        'target.' + QUOTENAME(@KeyColumn) + ' = source.' + QUOTENAME(@KeyColumn) + ', ',
-        ''
-    );
+    SET @UpdateList = REPLACE(REPLACE(@UpdateList, ', ,', ','), ' ,', '');
 
-    -- Build dynamic MERGE
+    IF LEFT(@UpdateList, 1) = ',' SET @UpdateList = STUFF(@UpdateList, 1, 1, '');
+
+    IF RIGHT(@UpdateList, 1) = ',' SET @UpdateList = LEFT(@UpdateList, LEN(@UpdateList) - 1);
+
     SET @Sql = N'
     MERGE ' + QUOTENAME(@SchemaName) + '.' + QUOTENAME(@PureTable) + ' AS target
     USING (
@@ -74,7 +61,7 @@ BEGIN
             ' + @WithClause + '
         )
     ) AS source
-    ON target.' + QUOTENAME(@KeyColumn) + ' = source.' + QUOTENAME(@KeyColumn) + '
+    ON ' + @JoinClause + '
     WHEN MATCHED THEN
         UPDATE SET ' + @UpdateList + '
     WHEN NOT MATCHED THEN
@@ -83,6 +70,6 @@ BEGIN
 
     EXEC sp_executesql
         @Sql,
-        N'@json NVARCHAR(MAX)',
+        @params = N'@json NVARCHAR(MAX)',
         @json = @LookupJson;
 END
