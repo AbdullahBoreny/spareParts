@@ -1,11 +1,16 @@
 ﻿CREATE TABLE [Communication].[Messages]
 (
     Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    ConversationId INT NOT NULL,          
-    SenderId UNIQUEIDENTIFIER NOT NULL,    
+
+    ConversationId INT NOT NULL,
+    SenderId INT NOT NULL,
+
     Content NVARCHAR(MAX) NOT NULL,
-    CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+
     IsRead BIT NOT NULL DEFAULT 0,
-    FOREIGN KEY (ConversationId) REFERENCES [Communication].[Conversation](Id),
-    FOREIGN KEY (SenderId) REFERENCES [Security].[Users](UserID)
+
+    CONSTRAINT FK_Messages_Conversations
+        FOREIGN KEY (ConversationId)
+        REFERENCES [Communication].[Conversations](Id)
 );
