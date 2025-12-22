@@ -6,6 +6,7 @@
 	[OrderNumber]		INT IDENTITY NOT NULL,
 	[OrderTotalVal]		NUMERIC(21,13) NOT NULL,
 	[OrderDate]			DATETIME NOT NULL,
+	[OrderNote]			NVARCHAR(MAX) NULL,
 
 CONSTRAINT [PK_OrderHeader]	PRIMARY KEY ([ShopID] ASC, [UserID] ASC, [OrderID] ASC, [OrderNumber] ASC),
 CONSTRAINT [FK_OrderHeader_Shops] FOREIGN KEY (ShopID) REFERENCES [General].[Shops]([ShopID]),

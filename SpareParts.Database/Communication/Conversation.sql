@@ -1,17 +1,11 @@
 ﻿CREATE TABLE [Communication].[Conversation]
 (
-    [Id] INT IDENTITY(1,1) NOT NULL,
-    [CustomerId] UNIQUEIDENTIFIER NOT NULL,
-    [ShopOwnerId] UNIQUEIDENTIFIER NOT NULL,
-    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+    [ConversationID] INT IDENTITY(1,1) NOT NULL,
+    [SenderUserID] UNIQUEIDENTIFIER NOT NULL,
+    [ReceiverUserID] UNIQUEIDENTIFIER NOT NULL,
+    [ConversationDate] DATETIME NOT NULL DEFAULT GETDATE(),
 
-    CONSTRAINT [PK_Conversation] PRIMARY KEY ([Id]),
-
-    CONSTRAINT [FK_Conversation_Customer]
-        FOREIGN KEY ([CustomerId])
-        REFERENCES [Security].[Users]([UserID]),
-
-    CONSTRAINT [FK_Conversation_ShopOwner]
-        FOREIGN KEY ([ShopOwnerId])
-        REFERENCES [Security].[Users]([UserID])
+CONSTRAINT [PK_Conversation] PRIMARY KEY ([ConversationID] ASC),
+CONSTRAINT [FK_Conversation_Sender] FOREIGN KEY ([SenderUserID]) REFERENCES [Security].[Users]([UserID]),
+CONSTRAINT [FK_Conversation_ShopOwner] FOREIGN KEY ([ReceiverUserID]) REFERENCES [Security].[Users]([UserID])
 );

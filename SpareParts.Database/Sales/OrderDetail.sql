@@ -10,6 +10,7 @@
 	[OrderProductVal]				NUMERIC(21,13) NOT NULL,
 	[OrderProductTotalVal]			NUMERIC(21,13) NOT NULL,
 	[OrderDate]						DATETIME NOT NULL,
+	[OrderProductNote]				NVARCHAR(MAX) NULL,
 
 CONSTRAINT [PK_OrderDetail]	PRIMARY KEY ([ShopID] ASC, [UserID] ASC, [OrderID] ASC, [OrderNumber] ASC, [OrderProductID] ASC),
 CONSTRAINT [FK_OrderDetail_OrderHeader] FOREIGN KEY (ShopID, UserID,OrderID, OrderNumber) REFERENCES [Sales].[OrderHeader](ShopID, UserID,OrderID, OrderNumber)
