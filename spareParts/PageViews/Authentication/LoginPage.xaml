@@ -7,14 +7,14 @@
              Title="Login">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="30">
+        <VerticalStackLayout BackgroundColor="#F7F9FC" Spacing="20" Padding="30">
             <!-- Header -->
             <VerticalStackLayout Spacing="10" Margin="0,50,0,30">
                 <Label Text="Welcome Back" 
                        FontSize="32" 
                        FontAttributes="Bold" 
                        HorizontalOptions="Center" 
-                       TextColor="#2C3E50" />
+                       TextColor="Black" />
                 
                 <Label Text="Sign in to your SpareParts account" 
                        FontSize="16" 
@@ -33,13 +33,16 @@
                            Keyboard="Email" 
                            FontSize="16"
                            BackgroundColor="#F8F9FA"
-                           PlaceholderColor="Gray" />
+                           PlaceholderColor="Gray"
+                           TextColor="Black"
+                           />
                     
                     <Entry Placeholder="Password" 
                            Text="{Binding Password}"
                            IsPassword="True" 
                            FontSize="16"
                            BackgroundColor="#F8F9FA"
+                           TextColor="Black"
                            PlaceholderColor="Gray" />
                     
                     <Button Text="Sign In" 
@@ -60,12 +63,16 @@
             
             <!-- Sign Up Link -->
             <StackLayout Orientation="Horizontal" 
-                         HorizontalOptions="Center" 
-                         Spacing="5">
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         >
                 <Label Text="Don't have an account?" 
                        TextColor="Gray" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
                        FontSize="14" />
-                <Button Text="Sign Up" 
+                <Button Text="Sign Up"
+                        
                         Command="{Binding NavigateToSignupCommand}"
                         BackgroundColor="Transparent" 
                         TextColor="#3498DB" 
@@ -73,24 +80,7 @@
                         FontAttributes="Bold" />
             </StackLayout>
             
-            <!-- Demo Credentials -->
-            <Frame BackgroundColor="#E8F4FD" 
-                   CornerRadius="10" 
-                   Padding="15" 
-                   Margin="0,20,0,0">
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="Demo Credentials:" 
-                           FontSize="12" 
-                           FontAttributes="Bold" 
-                           TextColor="#2C3E50" />
-                    <Label Text="Email: demo@spareparts.com" 
-                           FontSize="11" 
-                           TextColor="Gray" />
-                    <Label Text="Password: demo123" 
-                           FontSize="11" 
-                           TextColor="Gray" />
-                </VerticalStackLayout>
-            </Frame>
+          
         </VerticalStackLayout>
     </ScrollView>
 
