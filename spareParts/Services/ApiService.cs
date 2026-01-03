@@ -28,7 +28,6 @@ namespace spareParts.Services
             }
             catch (Exception)
             {
-                // TODO: Add proper logging
                 throw;
             }
         }
@@ -46,7 +45,6 @@ namespace spareParts.Services
             }
             catch (Exception)
             {
-                // TODO: Add proper logging
                 throw;
             }
         }

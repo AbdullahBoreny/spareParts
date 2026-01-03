@@ -10,22 +10,21 @@
         <VerticalStackLayout BackgroundColor="#F7F9FC" Spacing="20" Padding="30">
             <!-- Header -->
             <VerticalStackLayout Spacing="10" Margin="0,50,0,30">
-                <Label Text="Welcome Back" 
+                <Label Text="Welcome" 
                        FontSize="32" 
                        FontAttributes="Bold" 
                        HorizontalOptions="Center" 
                        TextColor="Black" />
                 
-                <Label Text="Sign in to your SpareParts account" 
+                <Label Text="Sign in to your account" 
                        FontSize="16" 
                        HorizontalOptions="Center" 
                        TextColor="Gray" />
             </VerticalStackLayout>
             
-            <!-- Login Form -->
-            <Frame BackgroundColor="White" 
-                   HasShadow="True" 
-                   CornerRadius="15" 
+            <Border BackgroundColor="White" 
+                   Shadow="True" 
+                   StrokeShape="RoundRectangle 15" 
                    Padding="25">
                 <VerticalStackLayout Spacing="20">
                     <Entry Placeholder="Email Address" 
@@ -59,9 +58,8 @@
                                        Color="#3498DB" 
                                        HorizontalOptions="Center" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
             
-            <!-- Sign Up Link -->
             <StackLayout Orientation="Horizontal" 
                          HorizontalOptions="Center"
                          VerticalOptions="Center"

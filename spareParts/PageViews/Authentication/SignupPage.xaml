@@ -75,7 +75,6 @@
                 </VerticalStackLayout>
             </Frame>
             
-            <!-- Sign In Link -->
             <StackLayout Orientation="Horizontal" 
                          HorizontalOptions="Center" 
                          Spacing="5">
@@ -94,7 +93,6 @@
                         FontAttributes="Bold" />
             </StackLayout>
             
-            <!-- Terms and Conditions -->
             <Label Text="By creating an account, you agree to our Terms of Service and Privacy Policy" 
                    FontSize="12" 
                    TextColor="Gray" 

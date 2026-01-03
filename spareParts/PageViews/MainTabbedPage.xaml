@@ -35,7 +35,6 @@
         </ResourceDictionary>
     </TabbedPage.Resources>
 
-    <!-- Home Tab -->
     <NavigationPage Title="Home">
         <x:Arguments>
             <customer:HomePage />
@@ -48,7 +47,6 @@
         </NavigationPage.IconImageSource>
     </NavigationPage>
 
-    <!-- Profile Tab -->
     <NavigationPage Title="Profile">
         <x:Arguments>
             <customer:ProfilePage />
@@ -61,7 +59,6 @@
         </NavigationPage.IconImageSource>
     </NavigationPage>
 
-    <!-- Cart Tab -->
     <NavigationPage Title="Cart">
         <x:Arguments>
             <customer:CartPage />

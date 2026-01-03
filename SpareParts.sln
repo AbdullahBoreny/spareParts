@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spareParts", "spareParts\sp
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SpareParts.Database", "SpareParts.Database\SpareParts.Database.sqlproj", "{CEBDFDBC-CADE-4849-B1C7-5043B01318C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpareParts.Service", "SpareParts.Service\SpareParts.Service.csproj", "{16A6071C-BFE8-4A42-B657-F2493988AA5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{CEBDFDBC-CADE-4849-B1C7-5043B01318C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEBDFDBC-CADE-4849-B1C7-5043B01318C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CEBDFDBC-CADE-4849-B1C7-5043B01318C0}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{16A6071C-BFE8-4A42-B657-F2493988AA5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16A6071C-BFE8-4A42-B657-F2493988AA5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16A6071C-BFE8-4A42-B657-F2493988AA5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16A6071C-BFE8-4A42-B657-F2493988AA5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

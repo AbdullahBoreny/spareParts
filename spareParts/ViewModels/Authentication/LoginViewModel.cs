@@ -1,77 +1,46 @@
-﻿using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using spareParts.Services;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using spareParts.Services;
 
 namespace spareParts.ViewModels.Authentication
 {
-    public class LoginViewModel : INotifyPropertyChanged
+    public partial class LoginViewModel : ObservableObject
     {
-        private readonly AuthService _authService;
-        private string _email = string.Empty;
-        private string _password = string.Empty;
-        private bool _isLoading = false;
+        [ObservableProperty]
+        public partial string Email { get; set; }
 
-        public LoginViewModel()
-        {
-            _authService = new AuthService();
-            LoginCommand = new Command(async () => await LoginAsync());
-            NavigateToSignupCommand = new Command(async () => await NavigateToSignupAsync());
-        }
+        [ObservableProperty]
+        public partial string Password { get; set; }
 
-        public string Email
-        {
-            get => _email;
-            set
-            {
-                _email = value;
-                OnPropertyChanged();
-            }
-        }
+        private bool IsLoading = false;
 
-        public string Password
-        {
-            get => _password;
-            set
-            {
-                _password = value;
-                OnPropertyChanged();
-            }
-        }
 
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ICommand LoginCommand { get; }
-        public ICommand NavigateToSignupCommand { get; }
-
+        [RelayCommand]
         private async Task LoginAsync()
         {
+            var currentPage = Application.Current?.Windows.FirstOrDefault()?.Page;
             if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please fill in all fields", "OK");
+                await currentPage.DisplayAlert("Error", "Please fill in all fields", "OK");
                 return;
             }
 
             try
             {
                 IsLoading = true;
-                var success = await _authService.LoginAsync(Email, Password);
+                var success = true;
                 
                 if (success)
                 {
                     // Set authentication state
-                    var authStateService = spareParts.Services.AuthenticationStateService.Instance;
+                    var authStateService = AuthenticationStateService.Instance;
                     authStateService.Login("Demo User", Email);
                     
-                    await Application.Current.MainPage.DisplayAlert("Success", "Login successful!", "OK");
+                    await currentPage.DisplayAlert("Success", "Login successful!", "OK");
                     
                     // Navigate to main app
                     if (Application.Current is App app)
@@ -81,12 +50,12 @@ namespace spareParts.ViewModels.Authentication
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Invalid email or password", "OK");
+                    await currentPage.DisplayAlert("Error", "Invalid email or password", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Login failed: {ex.Message}", "OK");
+                await currentPage.DisplayAlert("Error", $"Login failed: {ex.Message}", "OK");
             }
             finally
             {
@@ -98,12 +67,4 @@ namespace spareParts.ViewModels.Authentication
         {
             await Application.Current.MainPage.Navigation.PushAsync(new PageViews.Authentication.SignupPage());
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
 }
