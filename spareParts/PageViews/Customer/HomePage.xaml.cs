@@ -45,7 +45,7 @@ namespace spareParts.PageViews.Customer
             _authService.PropertyChanged -= OnAuthenticationStateChanged;
         }
 
-        private void OnAuthenticationStateChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnAuthenticationStateChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(AuthenticationStateService.IsAuthenticated) ||
                 e.PropertyName == nameof(AuthenticationStateService.CurrentUserName) ||
@@ -93,7 +93,7 @@ namespace spareParts.PageViews.Customer
         {
             if (sender is Button button && button.BindingContext is ShopWithProducts shop)
             {
-                var action = await Application.Current.MainPage.DisplayActionSheet(
+                var action = await Shell.Current.DisplayActionSheet(
                     "Contact Shop",
                     "Cancel",
                     null,
@@ -104,13 +104,13 @@ namespace spareParts.PageViews.Customer
                 switch (action)
                 {
                     case "Call":
-                        await Application.Current.MainPage.DisplayAlert("Call Shop", $"Calling {shop.Phone}", "OK");
+                        await Shell.Current.DisplayAlert("Call Shop", $"Calling {shop.Phone}", "OK");
                         break;
                     case "Email":
-                        await Application.Current.MainPage.DisplayAlert("Email Shop", $"Email: {shop.Email}", "OK");
+                        await Shell.Current.DisplayAlert("Email Shop", $"Email: {shop.Email}", "OK");
                         break;
                     case "Get Directions":
-                        await Application.Current.MainPage.DisplayAlert("Directions", $"Navigate to: {shop.Address}", "OK");
+                        await Shell.Current.DisplayAlert("Directions", $"Navigate to: {shop.Address}", "OK");
                         break;
                 }
             }

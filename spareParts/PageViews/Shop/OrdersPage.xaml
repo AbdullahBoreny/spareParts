@@ -10,7 +10,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <Frame Grid.Row="0" 
+        <Border Grid.Row="0" 
                BackgroundColor="LightBlue" 
                Padding="15">
             <Grid>
@@ -41,7 +41,7 @@
                         CornerRadius="5" 
                         x:Name="CompletedOrdersButton" />
             </Grid>
-        </Frame>
+        </Border>
         
         <CollectionView Grid.Row="1" 
                         x:Name="OrdersCollection" 
@@ -49,9 +49,14 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10">
-                        <Frame BackgroundColor="White" 
-                               HasShadow="True" 
-                               CornerRadius="8">
+                        <Border BackgroundColor="White" 
+                               StrokeShape="RoundRectangle 8">
+                            <Border.Shadow>
+                                <Shadow Brush="Black"
+                                        Offset="5,5"
+                                        Radius="10"
+                                        Opacity="0.5" />
+                            </Border.Shadow>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -95,7 +100,7 @@
                                        TextColor="Blue" 
                                        HorizontalOptions="End" />
                             </Grid>
-                        </Frame>
+                        </Border>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

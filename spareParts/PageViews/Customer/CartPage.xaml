@@ -13,128 +13,99 @@
     </ContentPage.Resources>
 
     <Grid>
-        <!-- Authentication Check -->
-        <VerticalStackLayout IsVisible="{Binding Source={x:Static services:AuthenticationStateService.Instance}, Path=IsAuthenticated, Converter={StaticResource InvertBoolConverter}}"
-                             Spacing="20"
-                             HorizontalOptions="Center"
-                             VerticalOptions="Center"
-                             Margin="20">
-            <Image Source="cart_icon.png"
-                   WidthRequest="80"
-                   HeightRequest="80"
-                   HorizontalOptions="Center" />
-            <Label Text="Please Sign In"
-                   FontSize="20"
-                   FontAttributes="Bold"
-                   TextColor="#E74C3C"
-                   HorizontalOptions="Center" />
-            <Label Text="Sign in to view your shopping cart and make purchases."
-                   FontSize="14"
-                   TextColor="Gray"
-                   HorizontalOptions="Center"
-                   HorizontalTextAlignment="Center" />
-            <Button Text="Go to Home to Sign In"
-                    BackgroundColor="#3498DB"
-                    TextColor="White"
-                    CornerRadius="8"
-                    HeightRequest="45"
-                    WidthRequest="200"
-                    FontSize="16"
-                    x:Name="GoToHomeButton" />
-        </VerticalStackLayout>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         
-        <!-- Cart Content (Visible when authenticated) -->
-        <Grid IsVisible="{Binding Source={x:Static services:AuthenticationStateService.Instance}, Path=IsAuthenticated}">
+        <CollectionView Grid.Row="0" x:Name="CartItemsCollection">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Grid Padding="10">
+                    <Border BackgroundColor="White"
+                            StrokeShape="RoundRectangle 8" >
+                        <Border.Shadow>
+                                <Shadow Brush="Black"
+                                    Offset="5,5"
+                                    Radius="10"
+                                    Opacity="0.5" />
+                        </Border.Shadow>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Grid.Row="0" 
+                                    Text="{Binding ProductName}" 
+                                    FontSize="16" 
+                                    FontAttributes="Bold" />
+                            
+                            <Label Grid.Row="1" 
+                                    Text="{Binding Price, StringFormat='${0:F2}'}" 
+                                    FontSize="14" 
+                                    TextColor="Green" />
+                            
+                            <Stepper Grid.Row="0" 
+                                        Grid.RowSpan="2" 
+                                        Grid.Column="1" 
+                                        Value="{Binding Quantity}" 
+                                        Minimum="1" 
+                                        Maximum="10" />
+                            
+                            <Button Grid.Row="0" 
+                                    Grid.RowSpan="1" 
+                                    Grid.Column="2" 
+                                    Text="Remove"
+                                    BackgroundColor="Red" 
+                                    TextColor="White" 
+                                    CornerRadius="5" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+    
+    <Border Grid.Row="1" 
+            BackgroundColor="LightGray" 
+            Padding="20">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             
-            <CollectionView Grid.Row="0" x:Name="CartItemsCollection">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10">
-                        <Frame BackgroundColor="White" 
-                               HasShadow="True" 
-                               CornerRadius="8">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                
-                                <Label Grid.Row="0" 
-                                       Text="{Binding ProductName}" 
-                                       FontSize="16" 
-                                       FontAttributes="Bold" />
-                                
-                                <Label Grid.Row="1" 
-                                       Text="{Binding Price, StringFormat='${0:F2}'}" 
-                                       FontSize="14" 
-                                       TextColor="Green" />
-                                
-                                <Stepper Grid.Row="0" 
-                                         Grid.RowSpan="2" 
-                                         Grid.Column="1" 
-                                         Value="{Binding Quantity}" 
-                                         Minimum="1" 
-                                         Maximum="10" />
-                                
-                                <Button Grid.Row="0" 
-                                        Grid.RowSpan="1" 
-                                        Grid.Column="2" 
-                                        Text="Remove"
-                                        BackgroundColor="Red" 
-                                        TextColor="White" 
-                                        CornerRadius="5" />
-                            </Grid>
-                        </Frame>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        
-        <Frame Grid.Row="1" 
-               BackgroundColor="LightGray" 
-               Padding="20">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                
-                <Label Grid.Row="0" 
-                       Text="Total:" 
-                       FontSize="18" 
-                       FontAttributes="Bold" />
-                
-                <Label Grid.Row="0" 
-                       Grid.Column="1" 
-                       Text="{Binding TotalPrice, StringFormat='${0:F2}'}" 
-                       FontSize="18" 
-                       FontAttributes="Bold" 
-                       HorizontalOptions="End" />
-                
-                <Button Grid.Row="1" 
-                        Grid.ColumnSpan="2" 
-                        Text="Checkout" 
-                        BackgroundColor="Green" 
-                        TextColor="White" 
-                        CornerRadius="8" 
-                        HeightRequest="50" 
-                        Margin="0,10,0,0" />
-                </Grid>
-            </Frame>
-        </Grid>
+            <Label Grid.Row="0" 
+                    Text="Total:" 
+                    FontSize="18" 
+                    FontAttributes="Bold" />
+            
+            <Label Grid.Column="1" 
+                    Text="{Binding TotalPrice, StringFormat='${0:F2}'}" 
+                    FontSize="18" 
+                    FontAttributes="Bold" 
+                    HorizontalOptions="End" />
+            
+            <Button Grid.Row="1" 
+                    Grid.ColumnSpan="2" 
+                    Text="Checkout" 
+                    BackgroundColor="Green" 
+                    TextColor="White" 
+                    CornerRadius="8" 
+                    HeightRequest="50" 
+                    Margin="0,10,0,0" />
+            </Grid>
+        </Border>
     </Grid>
 
 </ContentPage>

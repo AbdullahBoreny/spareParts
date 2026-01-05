@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using spareParts.Services;
+using spareParts.PageViews;
+using spareParts.PageViews.Authentication;
 
 namespace spareParts.ViewModels.Authentication
 {
-    public class SignupViewModel : INotifyPropertyChanged
+    public class SignupViewModel : ObservableObject
     {
-        private readonly AuthService _authService;
+        private readonly ApiService _apiService;
         private string _name = string.Empty;
         private string _email = string.Empty;
         private string _password = string.Empty;
@@ -16,9 +19,9 @@ namespace spareParts.ViewModels.Authentication
 
         public SignupViewModel()
         {
-            _authService = new AuthService();
+            _apiService = new ApiService();
             SignupCommand = new Command(async () => await SignupAsync());
-            NavigateToLoginCommand = new Command(async () => await NavigateToLoginAsync());
+            NavigateToLoginCommand = new Command(() => NavigateToLoginAsync());
         }
 
         public string Name
@@ -79,26 +82,26 @@ namespace spareParts.ViewModels.Authentication
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Email) || 
                 string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(ConfirmPassword))
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please fill in all fields", "OK");
+                await Shell.Current.DisplayAlert("Error", "Please fill in all fields", "OK");
                 return;
             }
 
             if (Password != ConfirmPassword)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Passwords do not match", "OK");
+                await Shell.Current.DisplayAlert("Error", "Passwords do not match", "OK");
                 return;
             }
 
             if (Password.Length < 6)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Password must be at least 6 characters long", "OK");
+                await Shell.Current.DisplayAlert("Error", "Password must be at least 6 characters long", "OK");
                 return;
             }
 
             try
             {
                 IsLoading = true;
-                var success = await _authService.RegisterAsync(Email, Password, Name);
+                var success = await _apiService.RegisterAsync(Email, Password, Name);
                 
                 if (success)
                 {
@@ -106,22 +109,22 @@ namespace spareParts.ViewModels.Authentication
                     var authStateService = spareParts.Services.AuthenticationStateService.Instance;
                     authStateService.Login(Name, Email);
                     
-                    await Application.Current.MainPage.DisplayAlert("Success", "Account created successfully!", "OK");
+                    await Shell.Current.DisplayAlert("Success", "Account created successfully!", "OK");
                     
                     // Navigate to main app
                     if (Application.Current is App app)
                     {
-                        app.NavigateToMainApp();
+                        await NavigationService.GoTo("AppShellWithBottomTabs");
                     }
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Registration failed. Please try again.", "OK");
+                    await Shell.Current.DisplayAlert("Error", "Registration failed. Please try again.", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Registration failed: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Registration failed: {ex.Message}", "OK");
             }
             finally
             {
@@ -129,9 +132,9 @@ namespace spareParts.ViewModels.Authentication
             }
         }
 
-        private async Task NavigateToLoginAsync()
+        private void NavigateToLoginAsync()
         {
-            await Application.Current.MainPage.Navigation.PopAsync();
+             NavigationService.SetRoot(new LoginPage());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

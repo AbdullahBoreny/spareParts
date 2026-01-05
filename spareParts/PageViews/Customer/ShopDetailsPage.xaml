@@ -14,10 +14,15 @@
     <ScrollView>
         <VerticalStackLayout Spacing="20" Padding="20">
             <!-- Shop Header -->
-            <Frame BackgroundColor="#3498DB" 
-                   HasShadow="True" 
-                   CornerRadius="15" 
+            <Border BackgroundColor="#3498DB" 
+                   StrokeShape="RoundRectangle 15" 
                    Padding="20">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="5,5"
+                            Radius="10"
+                            Opacity="0.5" />
+                </Border.Shadow>
                 <VerticalStackLayout Spacing="15">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -26,16 +31,22 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         
-                        <Frame Grid.Column="0" 
+                        <Border Grid.Column="0" 
                                BackgroundColor="White" 
-                               CornerRadius="25" 
+                               StrokeShape="RoundRectangle 25" 
                                WidthRequest="50" 
                                HeightRequest="50" 
                                Padding="0">
+                            <Border.Shadow>
+                                <Shadow Brush="Black"
+                                        Offset="5,5"
+                                        Radius="10"
+                                        Opacity="0.5" />
+                            </Border.Shadow>
                             <Image Source="shop_icon.png" 
                                    WidthRequest="40" 
                                    HeightRequest="40" />
-                        </Frame>
+                        </Border>
                         
                         <VerticalStackLayout Grid.Column="1" 
                                              Margin="15,0,0,0">
@@ -65,7 +76,7 @@
                            LineBreakMode="WordWrap" 
                            MaxLines="4" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
             
             <!-- Shop Stats -->
             <Grid>
@@ -75,11 +86,16 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 
-                <Frame Grid.Column="0" 
+                <Border Grid.Column="0" 
                        BackgroundColor="White" 
-                       HasShadow="True" 
-                       CornerRadius="10" 
+                       StrokeShape="RoundRectangle 10" 
                        Padding="15">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="5,5"
+                                Radius="10"
+                                Opacity="0.5" />
+                    </Border.Shadow>
                     <VerticalStackLayout HorizontalOptions="Center">
                         <Label Text="{Binding ProductCount}" 
                                FontSize="16" 
@@ -91,14 +107,19 @@
                                TextColor="Gray" 
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
                 
-                <Frame Grid.Column="1" 
+                <Border Grid.Column="1" 
                        BackgroundColor="White" 
-                       HasShadow="True" 
-                       CornerRadius="10" 
+                       StrokeShape="RoundRectangle 10" 
                        Padding="15" 
                        Margin="10,0">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="5,5"
+                                Radius="10"
+                                Opacity="0.5" />
+                    </Border.Shadow>
                     <VerticalStackLayout HorizontalOptions="Center">
                         <Label Text="{Binding Rating}" 
                                FontSize="16" 
@@ -110,13 +131,18 @@
                                TextColor="Gray" 
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
                 
-                <Frame Grid.Column="2" 
+                <Border Grid.Column="2" 
                        BackgroundColor="White" 
-                       HasShadow="True" 
-                       CornerRadius="10" 
+                       StrokeShape="RoundRectangle 10" 
                        Padding="15">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="5,5"
+                                Radius="10"
+                                Opacity="0.5" />
+                    </Border.Shadow>
                     <VerticalStackLayout HorizontalOptions="Center">
                         <Label Text="{Binding Distance}" 
                                FontSize="16" 
@@ -128,14 +154,19 @@
                                TextColor="Gray" 
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
             </Grid>
             
             <!-- Contact Information -->
-            <Frame BackgroundColor="White" 
-                   HasShadow="True" 
-                   CornerRadius="15" 
+            <Border BackgroundColor="White" 
+                   StrokeShape="RoundRectangle 15" 
                    Padding="20">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="5,5"
+                            Radius="10"
+                            Opacity="0.5" />
+                </Border.Shadow>
                 <VerticalStackLayout Spacing="15">
                     <Label Text="Contact Information" 
                            FontSize="18" 
@@ -224,12 +255,11 @@
                                 Clicked="OnMapClicked" />
                     </Grid>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
             
             <!-- Featured Products -->
-            <Frame BackgroundColor="White" 
-                   HasShadow="True" 
-                   CornerRadius="15" 
+            <Border BackgroundColor="White"
+                   StrokeShape="RoundRectangle 15" 
                    Padding="20">
                 <VerticalStackLayout Spacing="15">
                     <Label Text="Featured Products" 
@@ -241,8 +271,8 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Padding="10">
-                                    <Frame BackgroundColor="#F8F9FA" 
-                                           CornerRadius="10" 
+                                    <Border BackgroundColor="#F8F9FA" 
+                                           StrokeShape="RoundRectangle 10" 
                                            Padding="15">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -271,13 +301,13 @@
                                                     WidthRequest="70" 
                                                     FontSize="12" />
                                         </Grid>
-                                    </Frame>
+                                    </Border>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
             
             <!-- Action Buttons -->
             <Grid>

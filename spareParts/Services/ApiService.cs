@@ -8,16 +8,16 @@ namespace spareParts.Services
 {
     public class ApiService
     {
-        protected readonly HttpClient _httpClient;
-        protected readonly string _baseUrl;
+        public HttpClient _httpClient;
+        public string _baseUrl;
 
         public ApiService()
         {
             _httpClient = new HttpClient();
-            _baseUrl = "https://api.spareparts.com"; // TODO: Configure from app settings
+            _baseUrl = "http://74.225.29.240/SpareParts/api/"; // TODO: Configure from app settings
         }
 
-        protected async Task<T> GetAsync<T>(string endpoint)
+        public async Task<T> GetAsync<T>(string endpoint)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace spareParts.Services
             }
         }
 
-        protected async Task<T> PostAsync<T>(string endpoint, object data)
+        public async Task<T> PostAsync<T>(string endpoint, object data)
         {
             try
             {
@@ -47,6 +47,19 @@ namespace spareParts.Services
             {
                 throw;
             }
+        }
+
+        public async Task<bool> RegisterAsync(string email, string password, string name)
+        {
+            // TODO: Implement registration logic
+            await Task.Delay(1000); // Simulate API call
+            return true;
+        }
+
+        public async Task LogoutAsync()
+        {
+            // TODO: Implement logout logic
+            await Task.Delay(500);
         }
     }
 }

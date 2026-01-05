@@ -4,7 +4,7 @@ namespace spareParts.Services
 {
     public class AuthenticationStateService : INotifyPropertyChanged
     {
-        private static AuthenticationStateService? _instance;
+        private static AuthenticationStateService _instance;
         public static AuthenticationStateService Instance => _instance ??= new AuthenticationStateService();
 
         private bool _isAuthenticated;
@@ -109,7 +109,7 @@ namespace spareParts.Services
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

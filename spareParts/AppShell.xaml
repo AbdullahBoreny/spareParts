@@ -9,11 +9,13 @@
     <!-- Register routes for navigation -->
     <ShellContent
         Title="Login"
+        FlyoutItemIsVisible="False"
         ContentTemplate="{DataTemplate auth:LoginPage}"
         Route="LoginPage" />
 
     <ShellContent
         Title="Signup"
+        FlyoutItemIsVisible="False"
         ContentTemplate="{DataTemplate auth:SignupPage}"
         Route="SignupPage" />
     <ShellContent

@@ -12,32 +12,55 @@ namespace SpareParts.Service.Controllers
     {
 
         [HttpPost("Login")]
-        public bool Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
-            string Username = HttpContext.Request.Headers["Username"];
-            string Password = HttpContext.Request.Headers["Password"];
+            string Username = model.Email;
+            string usedPassword = model.Password;
 
-            using(SqlConnection connection = new SqlConnection())
+
+            using (SqlConnection connection = new SqlConnection("SpareParts"))
             {
-                using (SqlCommand command = connection.CreateCommand())
+                connection.Open();
+                using (SqlCommand command = new SqlCommand())
                 {
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
-                    command.CommandText = "spLogin";
-                    command.Parameters.AddWithValue("username", Username);
-                    command.Parameters.AddWithValue("password", Password);
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = "SELECT * FROM Security.Users WHERE UserEmail = @Username";
+                    command.Parameters.AddWithValue("@Username", Username);
+
+                    using(SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            return true;
+                            int passwordID = reader.GetOrdinal("UserPassword");
+                            int userShortID = reader.GetOrdinal("UserShortName");
+                            int userNameID = reader.GetOrdinal("UserName");
+                            int userEmailID = reader.GetOrdinal("UserEmail");
+                            int userGenderID = reader.GetOrdinal("UserGenderID");
+                            int userAuthID = reader.GetOrdinal("UserIsAuthenticated");
+                            
+                            string password = reader.GetString(passwordID);
+                            string userNameShort = reader.GetString(userShortID);
+                            string username = reader.GetString(userNameID);
+                            string userEmail = reader.GetString(userEmailID);
+                            string userGender = reader.GetString(userGenderID);
+                            string isAuthenticated = reader.GetString(userAuthID);
+
+
+
+                            bool isValid = BCrypt.Net.BCrypt.Verify(usedPassword, password);
+
+                            if (!isValid) return Unauthorized("Invalid Password");
+
+                            return Ok(new { Success = true, Username = username, Email = userEmail});
+                        }
+                        else
+                        {
+                            return Unauthorized(new { Success = false, Message = "User Not Found"});
                         }
                     }
-
                 }
             }
-
-
-            return false;
+            return Unauthorized(new { Success = false, Message = "Database not found"});
         }
     }
 }

@@ -107,7 +107,7 @@ namespace spareParts.PageViews
             }
         }
 
-        private void OnDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)
+        private void OnDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
         {
             // Adjust layout based on orientation and screen size changes
             var orientation = e.DisplayInfo.Orientation;
@@ -127,7 +127,7 @@ namespace spareParts.PageViews
             }
         }
 
-        private void OnAuthenticationStateChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnAuthenticationStateChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(AuthenticationStateService.IsAuthenticated))
             {

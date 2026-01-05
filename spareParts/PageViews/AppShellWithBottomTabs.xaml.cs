@@ -90,13 +90,13 @@ namespace spareParts.PageViews
             }
         }
 
-        private void OnDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)
+        private void OnDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
         {
             // Reapply responsive icon sizing when display info changes
             ApplyResponsiveIconSizing();
         }
 
-        private void OnAuthenticationStateChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnAuthenticationStateChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(AuthenticationStateService.IsAuthenticated))
             {

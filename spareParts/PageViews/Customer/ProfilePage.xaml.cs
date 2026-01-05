@@ -2,6 +2,7 @@ using Microsoft.Maui.Controls;
 using spareParts.Services;
 using spareParts.Models;
 using System.Collections.ObjectModel;
+using spareParts.PageViews.Authentication;
 
 namespace spareParts.PageViews.Customer
 {
@@ -33,7 +34,7 @@ namespace spareParts.PageViews.Customer
             LoadUserData();
         }
 
-        private void OnAuthenticationStateChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnAuthenticationStateChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(AuthenticationStateService.IsAuthenticated) ||
                 e.PropertyName == nameof(AuthenticationStateService.CurrentUserName) ||
@@ -101,24 +102,17 @@ namespace spareParts.PageViews.Customer
         {
             _authService.Logout();
             await DisplayAlert("Signed Out", "You have been successfully signed out.", "OK");
-            
-            // Navigate back to login page
-            if (Application.Current is App app)
-            {
-                app.SetInitialPage();
-            }
+            await NavigationService.GoTo("LoginPage");
         }
 
         private async void OnGoToHomeClicked(object sender, EventArgs e)
         {
-            // Navigate to Home tab using Shell
-            await Shell.Current.GoToAsync("//Home");
+            await NavigationService.GoTo("HomePage");
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            // Unsubscribe from events to prevent memory leaks
             _authService.PropertyChanged -= OnAuthenticationStateChanged;
         }
     }

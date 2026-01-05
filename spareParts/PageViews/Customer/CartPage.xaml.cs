@@ -31,9 +31,6 @@ namespace spareParts.PageViews.Customer
             BindingContext = this;
             CartItemsCollection.ItemsSource = CartItems;
             
-            // Set up event handlers
-            GoToHomeButton.Clicked += OnGoToHomeClicked;
-            
             // Subscribe to authentication state changes
             _authService.PropertyChanged += OnAuthenticationStateChanged;
             
@@ -46,7 +43,7 @@ namespace spareParts.PageViews.Customer
             LoadSampleCartItems();
         }
 
-        private void OnAuthenticationStateChanged(object? sender, PropertyChangedEventArgs e)
+        private void OnAuthenticationStateChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(AuthenticationStateService.IsAuthenticated))
             {
@@ -94,7 +91,7 @@ namespace spareParts.PageViews.Customer
         private async void OnGoToHomeClicked(object sender, EventArgs e)
         {
             // Navigate to Home tab using Shell
-            await Shell.Current.GoToAsync("//Home");
+            await Shell.Current.GoToAsync("HomePage");
         }
 
         protected override void OnDisappearing()
@@ -104,7 +101,7 @@ namespace spareParts.PageViews.Customer
             _authService.PropertyChanged -= OnAuthenticationStateChanged;
         }
 
-        public new event PropertyChangedEventHandler? PropertyChanged;
+        public new event PropertyChangedEventHandler PropertyChanged;
 
         protected new virtual void OnPropertyChanged(string propertyName)
         {

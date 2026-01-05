@@ -4,7 +4,7 @@ namespace spareParts.PageViews.Customer
 {
     public partial class ShopDetailsPage : ContentPage
     {
-        private ShopWithProducts? _currentShop;
+        private ShopWithProducts _currentShop;
 
         public ShopDetailsPage()
         {

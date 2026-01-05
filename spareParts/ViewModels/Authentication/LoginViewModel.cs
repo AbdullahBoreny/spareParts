@@ -1,61 +1,79 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using spareParts.Services;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using spareParts.PageViews;
+using spareParts.PageViews.Authentication;
+using spareParts.Utilities_network;
+using spareParts.Services;
 
 namespace spareParts.ViewModels.Authentication
 {
     public partial class LoginViewModel : ObservableObject
     {
         [ObservableProperty]
-        public partial string Email { get; set; }
+        public partial string Mail { get; set; }
 
         [ObservableProperty]
         public partial string Password { get; set; }
 
-        private bool IsLoading = false;
+        [ObservableProperty]
+        public partial bool IsLoading { get; set; }
+
+        public ApiService apiService = new ApiService();
 
 
-        [RelayCommand]
-        private async Task LoginAsync()
+
+        public ICommand SignupCommand { get; }
+        public ICommand NavigateToSignupCommand { get; }
+
+        public ICommand LoginAsyncCommand {get;}
+
+        public LoginViewModel()
         {
-            var currentPage = Application.Current?.Windows.FirstOrDefault()?.Page;
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            NavigateToSignupCommand = new Command(() => NavigateToSignupAsync());
+            LoginAsyncCommand = new Command(() => LoginAsync());
+        }
+
+        private async void LoginAsync()
+        {
+            if (string.IsNullOrWhiteSpace(Mail) || string.IsNullOrWhiteSpace(Password))
             {
-                await currentPage.DisplayAlert("Error", "Please fill in all fields", "OK");
+                await Shell.Current.DisplayAlert("Error", "Please fill in all fields", "OK");
                 return;
             }
 
             try
             {
-                IsLoading = true;
-                var success = true;
-                
-                if (success)
+                if (NetworkCheck.IsConnected())
                 {
-                    // Set authentication state
-                    var authStateService = AuthenticationStateService.Instance;
-                    authStateService.Login("Demo User", Email);
-                    
-                    await currentPage.DisplayAlert("Success", "Login successful!", "OK");
-                    
-                    // Navigate to main app
-                    if (Application.Current is App app)
+                    loginRequest loginRequest = new loginRequest(){Email= Mail, Password= Password};
+                    var response = await apiService.PostAsync<loginRespone>("sync/Login", loginRequest);
+
+                    if (response.Success)
                     {
-                        app.NavigateToMainApp();
+                        var authStateService = AuthenticationStateService.Instance;
+                        authStateService.Login("Demo User", Mail);
+                        
+                        await Shell.Current.DisplayAlert("Success", "Login successful!", "OK");
+                        
+                        if (Application.Current is App app)
+                        {
+                            NavigationService.SetRoot(new AppShellWithBottomTabs());
+                        }
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("Error", "Invalid email or password", "OK");
                     }
                 }
                 else
                 {
-                    await currentPage.DisplayAlert("Error", "Invalid email or password", "OK");
+                    await Shell.Current.DisplayAlert("Oops!", "Failed to connect to the internet", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await currentPage.DisplayAlert("Error", $"Login failed: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Login failed: {ex.Message}", "OK");
             }
             finally
             {
@@ -63,8 +81,22 @@ namespace spareParts.ViewModels.Authentication
             }
         }
 
-        private async Task NavigateToSignupAsync()
+        private void NavigateToSignupAsync()
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new PageViews.Authentication.SignupPage());
+            NavigationService.SetRoot(new SignupPage());
         }
+        private class loginRequest
+        {
+            public string Email {get; set;}
+            public string Password {get; set;}
+        }
+        private class loginRespone
+        {
+            public bool Success {get; set;}
+
+            public string Username {get; set;}
+
+            public string Email {get; set;}
+        }
+    }
 }
