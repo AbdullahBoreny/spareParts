@@ -67,5 +67,13 @@ namespace SpareParts.Service.Controllers
                 return BadRequest(new { Success = false, Message = ex.Message });
             }
         }
+
+
+        public class LoginRequest
+        {
+            public string Email { get; }
+            public string Password { get; }
+        }
     }
+
 }
