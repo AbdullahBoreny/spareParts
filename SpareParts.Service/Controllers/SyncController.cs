@@ -12,55 +12,60 @@ namespace SpareParts.Service.Controllers
     {
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest model)
+        public IActionResult Login([FromBody] LoginRequest model)
         {
             string Username = model.Email;
             string usedPassword = model.Password;
 
-
-            using (SqlConnection connection = new SqlConnection("SpareParts"))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand())
+                using (SqlConnection connection = new SqlConnection("SpareParts"))
                 {
-                    command.CommandType = System.Data.CommandType.Text;
-                    command.CommandText = "SELECT * FROM Security.Users WHERE UserEmail = @Username";
-                    command.Parameters.AddWithValue("@Username", Username);
-
-                    using(SqlDataReader reader = command.ExecuteReader())
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand())
                     {
-                        if (reader.Read())
+                        command.CommandType = System.Data.CommandType.Text;
+                        command.CommandText = "SELECT * FROM Security.Users WHERE UserEmail = @Username";
+                        command.Parameters.AddWithValue("@Username", Username);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            int passwordID = reader.GetOrdinal("UserPassword");
-                            int userShortID = reader.GetOrdinal("UserShortName");
-                            int userNameID = reader.GetOrdinal("UserName");
-                            int userEmailID = reader.GetOrdinal("UserEmail");
-                            int userGenderID = reader.GetOrdinal("UserGenderID");
-                            int userAuthID = reader.GetOrdinal("UserIsAuthenticated");
-                            
-                            string password = reader.GetString(passwordID);
-                            string userNameShort = reader.GetString(userShortID);
-                            string username = reader.GetString(userNameID);
-                            string userEmail = reader.GetString(userEmailID);
-                            string userGender = reader.GetString(userGenderID);
-                            string isAuthenticated = reader.GetString(userAuthID);
+                            if (reader.Read())
+                            {
+                                int passwordID = reader.GetOrdinal("UserPassword");
+                                int userShortID = reader.GetOrdinal("UserShortName");
+                                int userNameID = reader.GetOrdinal("UserName");
+                                int userEmailID = reader.GetOrdinal("UserEmail");
+                                int userGenderID = reader.GetOrdinal("UserGenderID");
+                                int userAuthID = reader.GetOrdinal("UserIsAuthenticated");
+
+                                string password = reader.GetString(passwordID);
+                                string userNameShort = reader.GetString(userShortID);
+                                string username = reader.GetString(userNameID);
+                                string userEmail = reader.GetString(userEmailID);
+                                string userGender = reader.GetString(userGenderID);
+                                string isAuthenticated = reader.GetString(userAuthID);
 
 
 
-                            bool isValid = BCrypt.Net.BCrypt.Verify(usedPassword, password);
+                                bool isValid = BCrypt.Net.BCrypt.Verify(usedPassword, password);
 
-                            if (!isValid) return Unauthorized("Invalid Password");
+                                if (!isValid) return Unauthorized("Invalid Password");
 
-                            return Ok(new { Success = true, Username = username, Email = userEmail});
-                        }
-                        else
-                        {
-                            return Unauthorized(new { Success = false, Message = "User Not Found"});
+                                return Ok(new { Success = true, Username = username, Email = userEmail });
+                            }
+                            else
+                            {
+                                return Unauthorized(new { Success = false, Message = "User Not Found" });
+                            }
                         }
                     }
                 }
             }
-            return Unauthorized(new { Success = false, Message = "Database not found"});
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
         }
     }
 }

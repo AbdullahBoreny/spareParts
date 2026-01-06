@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{cebdfdbc-cade-4849-b1c7-5043b01318c0}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -100,5 +100,6 @@
     <None Include="Lookup\General\Categories.sql" />
     <None Include="Lookup\General\ProductBrands.sql" />
     <None Include="SpareParts.publish.xml" />
+    <None Include="SparePartsServer.publish.xml" />
   </ItemGroup>
 </Project>
