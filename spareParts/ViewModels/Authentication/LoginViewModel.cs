@@ -26,7 +26,7 @@ namespace spareParts.ViewModels.Authentication
         public ICommand SignupCommand { get; }
         public ICommand NavigateToSignupCommand { get; }
 
-        public ICommand LoginAsyncCommand {get;}
+        public ICommand LoginAsyncCommand { get; }
 
         public LoginViewModel()
         {
@@ -39,44 +39,40 @@ namespace spareParts.ViewModels.Authentication
             if (string.IsNullOrWhiteSpace(Mail) || string.IsNullOrWhiteSpace(Password))
             {
                 await Shell.Current.DisplayAlert("Error", "Please fill in all fields", "OK");
+
+                IsLoading = false;
                 return;
             }
-
-            try
+            if (NetworkCheck.IsConnected())
             {
-                if (NetworkCheck.IsConnected())
-                {
-                    loginRequest loginRequest = new loginRequest(){Email= Mail, Password= Password};
-                    var response = await apiService.PostAsync<loginRespone>("sync/Login", loginRequest);
+                loginRequest loginRequest = new loginRequest() { Email = Mail, Password = Password };
+                var response = await apiService.PostAsync<loginRespone>("sync/Login", loginRequest);
 
-                    if (response.Success)
+                if (response.Success)
+                {
+                    var authStateService = AuthenticationStateService.Instance;
+                    authStateService.Login("Demo User", Mail);
+
+                    await Shell.Current.DisplayAlert("Success", "Login successful!", "OK");
+
+                    if (Application.Current is App app)
                     {
-                        var authStateService = AuthenticationStateService.Instance;
-                        authStateService.Login("Demo User", Mail);
-                        
-                        await Shell.Current.DisplayAlert("Success", "Login successful!", "OK");
-                        
-                        if (Application.Current is App app)
-                        {
-                            NavigationService.SetRoot(new AppShellWithBottomTabs());
-                        }
+                        NavigationService.SetRoot(new AppShellWithBottomTabs());
                     }
-                    else
-                    {
-                        await Shell.Current.DisplayAlert("Error", "Invalid email or password", "OK");
-                    }
+
+                    IsLoading = false;
                 }
                 else
                 {
-                    await Shell.Current.DisplayAlert("Oops!", "Failed to connect to the internet", "OK");
+                    await Shell.Current.DisplayAlert("Error", "Invalid email or password", "OK");
+
+                    IsLoading = false;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                await Shell.Current.DisplayAlert("Error", $"Login failed: {ex.Message}", "OK");
-            }
-            finally
-            {
+                await Shell.Current.DisplayAlert("Oops!", "Failed to connect to the internet", "OK");
+
                 IsLoading = false;
             }
         }
@@ -87,16 +83,16 @@ namespace spareParts.ViewModels.Authentication
         }
         private class loginRequest
         {
-            public string Email {get; set;}
-            public string Password {get; set;}
+            public string Email { get; set; }
+            public string Password { get; set; }
         }
         private class loginRespone
         {
-            public bool Success {get; set;}
+            public bool Success { get; set; }
 
-            public string Username {get; set;}
+            public string Username { get; set; }
 
-            public string Email {get; set;}
+            public string Email { get; set; }
         }
     }
 }

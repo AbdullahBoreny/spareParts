@@ -1,77 +1,44 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
-using spareParts.Services;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Maui.ApplicationModel.Communication;
 using spareParts.PageViews;
 using spareParts.PageViews.Authentication;
+using spareParts.Services;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace spareParts.ViewModels.Authentication
 {
-    public class SignupViewModel : ObservableObject
+    public partial class SignupViewModel : ObservableObject
     {
-        private readonly ApiService _apiService;
-        private string _name = string.Empty;
-        private string _email = string.Empty;
-        private string _password = string.Empty;
-        private string _confirmPassword = string.Empty;
-        private bool _isLoading = false;
+        private readonly ApiService apiService;
 
+        [ObservableProperty]
+        public partial string Name { get; set; }
+
+        [ObservableProperty]
+        public partial string UserEmail { get; set; }
+
+        [ObservableProperty]
+        public partial string Password { get; set; }
+
+        [ObservableProperty]
+        public partial string ConfirmPassword { get; set; }
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsConsumer))]
+        public partial bool IsShopOwner { get; set; } = false;
+
+        public bool IsConsumer
+        {
+            get => !IsConsumer; // Returns the opposite of Personal
+            set => IsConsumer = !value; // If the UI sets Business to True, we set Personal to False
+        }
         public SignupViewModel()
         {
-            _apiService = new ApiService();
+            apiService = new ApiService();
             SignupCommand = new Command(async () => await SignupAsync());
             NavigateToLoginCommand = new Command(() => NavigateToLoginAsync());
-        }
-
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Email
-        {
-            get => _email;
-            set
-            {
-                _email = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Password
-        {
-            get => _password;
-            set
-            {
-                _password = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string ConfirmPassword
-        {
-            get => _confirmPassword;
-            set
-            {
-                _confirmPassword = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
         }
 
         public ICommand SignupCommand { get; }
@@ -79,7 +46,7 @@ namespace spareParts.ViewModels.Authentication
 
         private async Task SignupAsync()
         {
-            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Email) || 
+            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(UserEmail) || 
                 string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(ConfirmPassword))
             {
                 await Shell.Current.DisplayAlert("Error", "Please fill in all fields", "OK");
@@ -100,18 +67,15 @@ namespace spareParts.ViewModels.Authentication
 
             try
             {
-                IsLoading = true;
-                var success = await _apiService.RegisterAsync(Email, Password, Name);
-                
-                if (success)
+                SignupRequest signupRequest = new SignupRequest() { UserEmail = UserEmail, Password = Password, Name = Name, IsShopOwner = IsShopOwner };
+                var response = await apiService.PostAsync<signupResponse>("sync/Signup", signupRequest);
+                if (response.Success)
                 {
-                    // Set authentication state
-                    var authStateService = spareParts.Services.AuthenticationStateService.Instance;
-                    authStateService.Login(Name, Email);
+                    var authStateService = AuthenticationStateService.Instance;
+                    authStateService.Login(Name, UserEmail);
                     
                     await Shell.Current.DisplayAlert("Success", "Account created successfully!", "OK");
                     
-                    // Navigate to main app
                     if (Application.Current is App app)
                     {
                         await NavigationService.GoTo("AppShellWithBottomTabs");
@@ -126,22 +90,29 @@ namespace spareParts.ViewModels.Authentication
             {
                 await Shell.Current.DisplayAlert("Error", $"Registration failed: {ex.Message}", "OK");
             }
-            finally
-            {
-                IsLoading = false;
-            }
         }
 
         private void NavigateToLoginAsync()
         {
              NavigationService.SetRoot(new LoginPage());
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private class signupResponse
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            public bool Success { get; set; }
+
+            public string Message { get; set; }
         }
+
+        public class SignupRequest
+        {
+            public string UserEmail { get; set; }
+
+            public string Password { get; set; }
+
+            public string Name { get; set; }
+
+            public bool IsShopOwner { get; set; }
+        }
+
     }
 }

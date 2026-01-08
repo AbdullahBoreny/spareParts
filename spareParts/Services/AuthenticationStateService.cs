@@ -87,7 +87,6 @@ namespace spareParts.Services
             }
             catch (Exception)
             {
-                // If there's any error loading preferences, default to not authenticated
                 _isAuthenticated = false;
                 _currentUserName = string.Empty;
                 _currentUserEmail = string.Empty;
@@ -104,8 +103,6 @@ namespace spareParts.Services
             }
             catch (Exception)
             {
-                // Handle any errors saving preferences silently
-                // In a production app, you might want to log this
             }
         }
 

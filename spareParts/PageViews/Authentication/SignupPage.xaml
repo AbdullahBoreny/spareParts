@@ -59,7 +59,7 @@
                     <Border StrokeShape="RoundRectangle 10" StrokeThickness="1" BackgroundColor="Transparent">
                         <Entry Placeholder="Email Address" 
                                PlaceholderColor="#8899AA"
-                               Text="{Binding Email}"
+                               Text="{Binding UserEmail}"
                                Keyboard="Email" 
                                TextColor="White"
                                HeightRequest="50"
@@ -85,6 +85,15 @@
                                HeightRequest="50"
                                Margin="10,0" />
                     </Border>
+
+                    <VerticalStackLayout>
+                        <RadioButton Content="Consumer" 
+                                IsChecked="{Binding IsConsumer}" />
+                        
+                        
+                        <RadioButton Content="Shop Owner" 
+                                    IsChecked="{Binding IsShopOwner}" />
+                    </VerticalStackLayout>
 
                     <Button Text="SIGN UP"
                             BackgroundColor="#E65100"
