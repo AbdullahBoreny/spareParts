@@ -1,4 +1,4 @@
-@SpareParts.Service_HostAddress = http://74.225.29.240/SpareParts
+@SpareParts.Service_HostAddress = http://20.64.249.9/SpareParts
 
 POST {{SpareParts.Service_HostAddress}}/api/SyncController/Login
 Accept: application/json

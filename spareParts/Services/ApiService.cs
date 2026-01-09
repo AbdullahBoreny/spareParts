@@ -14,7 +14,7 @@ namespace spareParts.Services
         public ApiService()
         {
             _httpClient = new HttpClient();
-            _baseUrl = "http://74.225.29.240/SpareParts/api/"; // TODO: Configure from app settings
+            _baseUrl = "http://20.64.249.9/SpareParts/api/"; // TODO: Configure from app settings
         }
 
         public async Task<T> GetAsync<T>(string endpoint)

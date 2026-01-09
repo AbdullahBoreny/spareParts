@@ -31,8 +31,8 @@ namespace spareParts.ViewModels.Authentication
 
         public bool IsConsumer
         {
-            get => !IsConsumer;
-            set => IsConsumer = !value;
+            get => !IsShopOwner;
+            set => IsShopOwner = !value;
         }
         public SignupViewModel()
         {
@@ -67,7 +67,7 @@ namespace spareParts.ViewModels.Authentication
 
             try
             {
-                SignupRequest signupRequest = new SignupRequest() { UserEmail = UserEmail, Password = Password, Name = Name, IsShopOwner =  };
+                SignupRequest signupRequest = new SignupRequest() { UserEmail = UserEmail, Password = Password, Name = Name, IsShopOwner =  IsShopOwner};
                 var response = await apiService.PostAsync<signupResponse>("sync/Signup", signupRequest);
                 if (response.Success)
                 {

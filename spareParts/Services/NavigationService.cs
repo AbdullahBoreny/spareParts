@@ -37,7 +37,7 @@ public partial class NavigationService
         var window = Application.Current?.Windows.FirstOrDefault();
         if (window != null)
         {
-             window.Page = name;
+            window.Page = name;
         }
     }
 }
