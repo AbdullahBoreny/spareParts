@@ -31,8 +31,8 @@ namespace spareParts.ViewModels.Authentication
 
         public bool IsConsumer
         {
-            get => !IsConsumer; // Returns the opposite of Personal
-            set => IsConsumer = !value; // If the UI sets Business to True, we set Personal to False
+            get => !IsConsumer;
+            set => IsConsumer = !value;
         }
         public SignupViewModel()
         {
@@ -67,7 +67,7 @@ namespace spareParts.ViewModels.Authentication
 
             try
             {
-                SignupRequest signupRequest = new SignupRequest() { UserEmail = UserEmail, Password = Password, Name = Name, IsShopOwner = IsShopOwner };
+                SignupRequest signupRequest = new SignupRequest() { UserEmail = UserEmail, Password = Password, Name = Name, IsShopOwner =  };
                 var response = await apiService.PostAsync<signupResponse>("sync/Signup", signupRequest);
                 if (response.Success)
                 {
@@ -83,7 +83,15 @@ namespace spareParts.ViewModels.Authentication
                 }
                 else
                 {
-                    await Shell.Current.DisplayAlert("Error", "Registration failed. Please try again.", "OK");
+                    if (!string.IsNullOrEmpty(response.Message))
+                    {
+                        await Shell.Current.DisplayAlert("Error", response.Message, "OK");
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("Error", "Registration failed. Please try again.", "OK");
+                    }
+                    
                 }
             }
             catch (Exception ex)

@@ -2,3 +2,4 @@
 :r .\Lookup\General\Categories.sql
 :r .\Lookup\General\ProductBrands.sql
 :r .\Lookup\Security\Roles.sql
+:r .\Lookup\Security\Users.sql

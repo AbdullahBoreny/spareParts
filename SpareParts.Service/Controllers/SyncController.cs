@@ -148,37 +148,12 @@ namespace SpareParts.Service.Controllers
                             command.Parameters.AddWithValue("@fullName", fullName);
                             command.Parameters.AddWithValue("@shortName", shortName);
                             command.Parameters.AddWithValue("@UserEmail", userEmail);
-                            command.Parameters.AddWithValue("@userPassword", userPassword);
-                            command.Parameters.AddWithValue("@UserMobileNumber", "00000000000");
-                            command.Parameters.AddWithValue("@UserGender", 1);
+                            command.Parameters.AddWithValue("@userPassword", BCrypt.Net.BCrypt.HashPassword(userPassword));
                             command.Parameters.AddWithValue("@UserCreationDate", UserCreationDate);
                             command.Parameters.AddWithValue("@UserIsAuthenticated", true);
+                            command.Parameters.AddWithValue("@UserRoleID", isShopOwner ? 3 : 2);
 
                             command.ExecuteNonQuery();
-                        }
-                        using(SqlCommand command2 = new SqlCommand())
-                        {
-                            command2.CommandType = System.Data.CommandType.Text;
-                            command2.CommandText = "INSERT INTO Security.UserRole " +
-                                "(" +
-                                    "UserRoleID" +
-                                    ", UserID" +
-                                    ", RoleID" +
-                                    ", ModifiedOn" +
-                                ")" +
-                                "VALUES " +
-                                "(" +
-                                    "@UserRoleGuid" +
-                                    ", @UserGuid" +
-                                    ", @RoleID" +
-                                    ", @UserCreationDate" +
-                                ")";
-                            command2.Parameters.AddWithValue("@UserRoleGuid", UserRoleGuid);
-                            command2.Parameters.AddWithValue("@UserGuid", UserGuid);
-                            command2.Parameters.AddWithValue("@RoleID", isShopOwner ? 3 : 2);
-                            command2.Parameters.AddWithValue("@UserCreationDate", UserCreationDate);
-
-                            command2.ExecuteNonQuery();
                         }
                         return Ok(new {Success = true});
                     }

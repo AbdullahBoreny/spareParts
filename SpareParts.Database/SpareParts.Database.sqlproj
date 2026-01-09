@@ -91,6 +91,7 @@
     <Build Include="Marketplace\AdsImages.sql" />
     <Build Include="General\ProductBrands.sql" />
     <Build Include="General\ShopCategories.sql" />
+    <None Include="Lookup\Security\Users.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment.sql" />
