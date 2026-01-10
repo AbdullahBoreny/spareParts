@@ -5,6 +5,7 @@ using spareParts.PageViews;
 using spareParts.PageViews.Authentication;
 using spareParts.Utilities_network;
 using spareParts.Services;
+using System.Threading.Tasks;
 
 namespace spareParts.ViewModels.Authentication
 {
@@ -30,7 +31,7 @@ namespace spareParts.ViewModels.Authentication
 
         public LoginViewModel()
         {
-            NavigateToSignupCommand = new Command(() => NavigateToSignupAsync());
+            NavigateToSignupCommand = new Command(async () =>  await NavigateToSignupAsync());
             LoginAsyncCommand = new Command(() => LoginAsync());
         }
 
@@ -45,19 +46,20 @@ namespace spareParts.ViewModels.Authentication
             }
             if (NetworkCheck.IsConnected())
             {
-                loginRequest loginRequest = new loginRequest() { Email = Mail, Password = Password };
-                var response = await apiService.PostAsync<loginRespone>("sync/Login", loginRequest);
+                LoginRequest loginRequest = new LoginRequest() { Email = Mail, Password = Password };
+                string responseString = await apiService.PostAsync("Login", loginRequest);
+                var response = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(responseString);
 
                 if (response.Success)
                 {
                     var authStateService = AuthenticationStateService.Instance;
-                    authStateService.Login("Demo User", Mail);
+                    authStateService.Login(response.Username, Mail);
 
                     await Shell.Current.DisplayAlert("Success", "Login successful!", "OK");
 
                     if (Application.Current is App app)
                     {
-                        NavigationService.SetRoot(new AppShellWithBottomTabs());
+                        await NavigationService.SetRoot("AppShellWithBottomTabs");
                     }
 
                     IsLoading = false;
@@ -77,22 +79,20 @@ namespace spareParts.ViewModels.Authentication
             }
         }
 
-        private void NavigateToSignupAsync()
+        private async Task NavigateToSignupAsync()
         {
-            NavigationService.SetRoot(new SignupPage());
+            await NavigationService.SetRoot("SignupPage");
         }
-        private class loginRequest
-        {
+        public class LoginRequest
+        {            
             public string Email { get; set; }
             public string Password { get; set; }
         }
-        private class loginRespone
+        public class LoginResponse
         {
             public bool Success { get; set; }
-
+            public string Message { get; set; }
             public string Username { get; set; }
-
-            public string Email { get; set; }
         }
     }
 }

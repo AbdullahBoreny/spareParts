@@ -38,7 +38,7 @@ namespace spareParts.ViewModels.Authentication
         {
             apiService = new ApiService();
             SignupCommand = new Command(async () => await SignupAsync());
-            NavigateToLoginCommand = new Command(() => NavigateToLoginAsync());
+            NavigateToLoginCommand = new Command(async () => await NavigateToLoginAsync());
         }
 
         public ICommand SignupCommand { get; }
@@ -68,7 +68,8 @@ namespace spareParts.ViewModels.Authentication
             try
             {
                 SignupRequest signupRequest = new SignupRequest() { UserEmail = UserEmail, Password = Password, Name = Name, IsShopOwner =  IsShopOwner};
-                var response = await apiService.PostAsync<signupResponse>("sync/Signup", signupRequest);
+                string responseString = await apiService.PostAsync("Signup", signupRequest);
+                var response = System.Text.Json.JsonSerializer.Deserialize<signupResponse>(responseString);
                 if (response.Success)
                 {
                     var authStateService = AuthenticationStateService.Instance;
@@ -78,7 +79,7 @@ namespace spareParts.ViewModels.Authentication
                     
                     if (Application.Current is App app)
                     {
-                        await NavigationService.GoTo("AppShellWithBottomTabs");
+                        await NavigationService.SetRoot("AppShellWithBottomTabs");
                     }
                 }
                 else
@@ -100,9 +101,9 @@ namespace spareParts.ViewModels.Authentication
             }
         }
 
-        private void NavigateToLoginAsync()
+        private async Task NavigateToLoginAsync()
         {
-             NavigationService.SetRoot(new LoginPage());
+            await NavigationService.SetRoot("LoginPage");
         }
         private class signupResponse
         {
@@ -121,6 +122,5 @@ namespace spareParts.ViewModels.Authentication
 
             public bool IsShopOwner { get; set; }
         }
-
     }
 }

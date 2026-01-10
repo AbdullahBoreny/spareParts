@@ -4,7 +4,7 @@
              x:Class="spareParts.App">
     <Application.Resources>
         <ResourceDictionary>
-            <!-- Global app resources like colors, styles, etc. -->
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

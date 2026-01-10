@@ -11,20 +11,34 @@ namespace SpareParts.Service.Controllers
     [ApiController]
     public class SyncController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+        private readonly string  connectionString;
+
+        public SyncController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            connectionString = _configuration.GetConnectionString("SpareParts");
+
+        }
 
         [HttpPost("Login")]
         public IActionResult Login([FromBody] LoginRequest model)
         {
+            if (model == null)
+            {
+                return BadRequest("Model is null — JSON not bound");
+            }
             string Username = model.Email;
-            string usedPassword = model.Password;
+            string UserPassword = model.Password;
 
             try
             {
-                using (SqlConnection connection = new SqlConnection("SpareParts"))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand())
                     {
+                        command.Connection = connection;
                         command.CommandType = System.Data.CommandType.Text;
                         command.CommandText = "SELECT * FROM Security.Users WHERE UserEmail = @Username";
                         command.Parameters.AddWithValue("@Username", Username);
@@ -34,26 +48,16 @@ namespace SpareParts.Service.Controllers
                             if (reader.Read())
                             {
                                 int passwordID = reader.GetOrdinal("UserPassword");
-                                int userShortID = reader.GetOrdinal("UserShortName");
                                 int userNameID = reader.GetOrdinal("UserName");
-                                int userEmailID = reader.GetOrdinal("UserEmail");
-                                int userGenderID = reader.GetOrdinal("UserGenderID");
-                                int userAuthID = reader.GetOrdinal("UserIsAuthenticated");
 
                                 string password = reader.GetString(passwordID);
-                                string userNameShort = reader.GetString(userShortID);
                                 string username = reader.GetString(userNameID);
-                                string userEmail = reader.GetString(userEmailID);
-                                string userGender = reader.GetString(userGenderID);
-                                string isAuthenticated = reader.GetString(userAuthID);
 
+                                bool isValid = BCrypt.Net.BCrypt.Verify(UserPassword, password);
 
+                                if (!isValid) return Unauthorized(new { Success = false, Message = "Invalid Password"});
 
-                                bool isValid = BCrypt.Net.BCrypt.Verify(usedPassword, password);
-
-                                if (!isValid) return Unauthorized("Invalid Password");
-
-                                return Ok(new { Success = true, Username = username, Email = userEmail });
+                                return Ok(new { Success = true, Username = username});
                             }
                             else
                             {
@@ -102,6 +106,7 @@ namespace SpareParts.Service.Controllers
                     connection.Open();
                     using (SqlCommand command1 = new SqlCommand())
                     {
+                        command1.Connection = connection;
                         command1.CommandType = System.Data.CommandType.Text;
                         command1.CommandText = "SELECT 1 FROM Security.Users" +
                             "WHERE UserEmail= @userEmail";
@@ -119,6 +124,7 @@ namespace SpareParts.Service.Controllers
                     {
                         using (SqlCommand command = new SqlCommand())
                         {
+                            command.Connection = connection;
                             command.CommandType = System.Data.CommandType.Text;
                             command.CommandText = "INSERT INTO Security.Users" +
                                 "(" +
@@ -168,12 +174,11 @@ namespace SpareParts.Service.Controllers
                 return BadRequest(new { Success = false, Message = ex.Message });
             }
         }
-
-
-        public class LoginRequest
+    }
+    public class LoginRequest
         {
-            public string Email { get; }
-            public string Password { get; }
+            public string Email { get; set;}
+            public string Password { get; set;}
         }
 
         public class SignupRequest
@@ -186,6 +191,5 @@ namespace SpareParts.Service.Controllers
             public bool IsShopOwner { get; set;}
 
         }
-    }
 
 }

@@ -32,12 +32,8 @@ public partial class NavigationService
         await Shell.Current.GoToAsync("..");
     }
 
-    public static void SetRoot(Page name)
+    public static async Task SetRoot(string name)
     {
-        var window = Application.Current?.Windows.FirstOrDefault();
-        if (window != null)
-        {
-            window.Page = name;
-        }
+        await Shell.Current.GoToAsync($"//{name}");
     }
 }

@@ -9,18 +9,59 @@
              x:DataType="viewmodels:SignupViewModel"
              Title="Sign Up">
 
-
-
-
-
-
-
        <ContentPage.Background>
               <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                      <GradientStop Color="#1A2A3A" Offset="0.1" />
                      <GradientStop Color="#0D151F" Offset="1.0" />
               </LinearGradientBrush>
        </ContentPage.Background>
+       
+       <ContentPage.Resources>
+        <Style x:Key="UserTypeRadioButton" TargetType="RadioButton">
+            <Setter Property="ControlTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <HorizontalStackLayout Spacing="10">
+                            <Border x:Name="OuterCircle"
+                                    StrokeThickness="2"
+                                    Stroke="#8899AA"
+                                    HeightRequest="22"
+                                    WidthRequest="22"
+                                    StrokeShape="RoundRectangle 11">
+                                <Ellipse x:Name="InnerDot"
+                                         Fill="Transparent"
+                                         HeightRequest="12"
+                                         WidthRequest="12"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center" />
+                            </Border>
+                            
+                            <ContentPresenter VerticalOptions="Center" />
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroupList>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Unchecked">
+                                            <VisualState.Setters>
+                                                <Setter TargetName="OuterCircle" Property="Border.Stroke" Value="#8899AA" />
+                                                <Setter TargetName="InnerDot" Property="Shape.Fill" Value="Transparent" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState Name="Checked">
+                                            <VisualState.Setters>
+                                                <Setter TargetName="OuterCircle" Property="Border.Stroke" Value="#E64A19" />
+                                                <Setter TargetName="InnerDot" Property="Shape.Fill" Value="#E64A19" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateGroupList>
+                            </VisualStateManager.VisualStateGroups>
+                        </HorizontalStackLayout>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30,60,30,30" VerticalOptions="Center">
@@ -86,14 +127,22 @@
                                Margin="10,0" />
                     </Border>
 
-                    <VerticalStackLayout>
+                    <HorizontalStackLayout Spacing="50" HorizontalOptions="Center" BackgroundColor="Transparent">
                         <RadioButton Content="Consumer" 
-                                IsChecked="{Binding IsConsumer}" />
-                        
+                                GroupName="UserType"
+                                BackgroundColor="Transparent"
+                                TextColor="#8899AA"
+                                Style="{StaticResource UserTypeRadioButton}"
+                                IsChecked="{Binding IsConsumer,Mode=TwoWay}" />
                         
                         <RadioButton Content="Shop Owner" 
-                                    IsChecked="{Binding IsShopOwner}" />
-                    </VerticalStackLayout>
+                                GroupName="UserType"
+                                BackgroundColor="Transparent"
+                                TextColor="#8899AA"
+                                Style="{StaticResource UserTypeRadioButton}"
+                                IsChecked="{Binding IsShopOwner,Mode=TwoWay}" />
+                    </HorizontalStackLayout>
+                    
 
                     <Button Text="SIGN UP"
                             BackgroundColor="#E65100"
