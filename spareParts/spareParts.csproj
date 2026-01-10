@@ -44,7 +44,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\qetacom_icon.png" />
+		<MauiIcon Include="Resources\AppIcon\qetacom_icon.svg" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\qetacom_splash.png" Color="#121212" BaseSize="128,128" TintColor="#FFFFFF" />
