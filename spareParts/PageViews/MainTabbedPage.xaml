@@ -5,69 +5,50 @@
             xmlns:auth="clr-namespace:spareParts.PageViews.Authentication"
             x:Class="spareParts.PageViews.MainTabbedPage"
             Title="SpareParts"
-            BarBackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#2C3E50}"
-            BarTextColor="{AppThemeBinding Light=#6C757D, Dark=#BDC3C7}"
-            SelectedTabColor="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
-            UnselectedTabColor="{AppThemeBinding Light=#ADB5BD, Dark=#7F8C8D}">
+            BackgroundColor="#121B2B"
+            BarBackgroundColor="#121B2B"
+            BarTextColor="#8A92A6"
+            SelectedTabColor="#F35D07"
+            UnselectedTabColor="#8A92A6">
 
     <TabbedPage.Resources>
         <ResourceDictionary>
-            <!-- Responsive styles for different screen sizes -->
-            <Style x:Key="ResponsiveTabStyle" TargetType="TabbedPage">
-                <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light=#F8F9FA, Dark=#2C3E50}" />
-                <Setter Property="BarTextColor" Value="{AppThemeBinding Light=#6C757D, Dark=#BDC3C7}" />
-                <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}" />
-                <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light=#ADB5BD, Dark=#7F8C8D}" />
-            </Style>
-            
-            <!-- Platform-specific adjustments -->
-            <OnPlatform x:Key="TabBarHeight" x:TypeArguments="x:Double">
-                <On Platform="iOS" Value="83" />
-                <On Platform="Android" Value="56" />
-                <On Platform="WinUI" Value="48" />
-            </OnPlatform>
-            
             <OnPlatform x:Key="TabIconSize" x:TypeArguments="x:Double">
-                <On Platform="iOS" Value="28" />
+                <On Platform="iOS" Value="24" />
                 <On Platform="Android" Value="24" />
-                <On Platform="WinUI" Value="20" />
             </OnPlatform>
+
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="#121B2B" />
+                <Setter Property="BarTextColor" Value="White" />
+            </Style>
         </ResourceDictionary>
     </TabbedPage.Resources>
 
-    <NavigationPage Title="Home">
+    <NavigationPage Title=" ">
         <x:Arguments>
             <customer:HomePage />
         </x:Arguments>
         <NavigationPage.IconImageSource>
-            <FontImageSource Glyph="🏠" 
-                           FontFamily="Default" 
-                           Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
-                           Size="{StaticResource TabIconSize}" />
+            <FontImageSource Glyph="🏠" Size="{StaticResource TabIconSize}" />
         </NavigationPage.IconImageSource>
     </NavigationPage>
 
-    <NavigationPage Title="Profile">
+    <NavigationPage Title=" ">
+        <x:Arguments>
+            <customer:ChatsPage />
+        </x:Arguments>
+        <NavigationPage.IconImageSource>
+            <FontImageSource Glyph="💬" Size="{StaticResource TabIconSize}" />
+        </NavigationPage.IconImageSource>
+    </NavigationPage>
+
+    <NavigationPage Title=" ">
         <x:Arguments>
             <customer:ProfilePage />
         </x:Arguments>
         <NavigationPage.IconImageSource>
-            <FontImageSource Glyph="👤" 
-                           FontFamily="Default" 
-                           Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
-                           Size="{StaticResource TabIconSize}" />
-        </NavigationPage.IconImageSource>
-    </NavigationPage>
-
-    <NavigationPage Title="Cart">
-        <x:Arguments>
-            <customer:CartPage />
-        </x:Arguments>
-        <NavigationPage.IconImageSource>
-            <FontImageSource Glyph="🛒" 
-                           FontFamily="Default" 
-                           Color="{AppThemeBinding Light=#3498DB, Dark=#5DADE2}"
-                           Size="{StaticResource TabIconSize}" />
+            <FontImageSource Glyph="👤" Size="{StaticResource TabIconSize}" />
         </NavigationPage.IconImageSource>
     </NavigationPage>
 

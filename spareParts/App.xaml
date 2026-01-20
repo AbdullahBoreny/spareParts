@@ -4,7 +4,12 @@
              x:Class="spareParts.App">
     <Application.Resources>
         <ResourceDictionary>
-            
+            <Style TargetType="TabBar">
+                <Setter Property="Shell.TabBarBackgroundColor" Value="#121B2B" />
+                <Setter Property="Shell.TabBarTitleColor" Value="Transparent" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="#8A92A6" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="#F35D07" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

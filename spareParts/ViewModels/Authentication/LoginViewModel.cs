@@ -53,13 +53,13 @@ namespace spareParts.ViewModels.Authentication
                 if (response.Success)
                 {
                     var authStateService = AuthenticationStateService.Instance;
-                    authStateService.Login(response.Username, Mail);
+                    await authStateService.Login(response.Username, Mail);
 
                     await Shell.Current.DisplayAlert("Success", "Login successful!", "OK");
 
                     if (Application.Current is App app)
                     {
-                        await NavigationService.SetRoot("AppShellWithBottomTabs");
+                        Application.Current.MainPage = new AppShellWithBottomTabs();
                     }
 
                     IsLoading = false;

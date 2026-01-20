@@ -25,15 +25,17 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("HomePage", typeof(HomePage));
         Routing.RegisterRoute("ProductDetails", typeof(ProductDetails));
         Routing.RegisterRoute("ProfilePage", typeof(ProfilePage));
+        Routing.RegisterRoute("ShopRegistrationPage", typeof(ShopRegistrationPage));
 
         CheckAuthentication();
     }
 
     private async void CheckAuthentication()
     {
+        await AuthenticationStateService.Instance.InitializeAsync();
         if (_authService.IsAuthenticated)
         {
-            await NavigationService.GoTo("HomePage");
+            Application.Current.MainPage = new AppShellWithBottomTabs();
         }
         else
         {

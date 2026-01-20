@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:spareParts.Converters"
              x:Class="spareParts.PageViews.Customer.ShopDetailsPage"
+             xmlns:vm="clr-namespace:spareParts.ViewModels"
              Title="Shop Details">
 
     <ContentPage.Resources>
@@ -13,7 +14,6 @@
 
     <ScrollView>
         <VerticalStackLayout Spacing="20" Padding="20">
-            <!-- Shop Header -->
             <Border BackgroundColor="#3498DB" 
                    StrokeShape="RoundRectangle 15" 
                    Padding="20">
@@ -205,8 +205,7 @@
                                 HeightRequest="40" 
                                 WidthRequest="60" 
                                 FontSize="11"
-                                
-                                Clicked="OnCallClicked" />
+                                Command="{Binding ShowPhoneCommand}" />
                         
                         <Label Grid.Row="1" Grid.Column="0" 
                                Text="✉️" 
@@ -228,7 +227,7 @@
                                 HeightRequest="40" 
                                 WidthRequest="60"
                                 FontSize="11"
-                                Clicked="OnEmailClicked" />
+                                Command="{Binding ShowEmailCommand}" />
                         
                         <Label Grid.Row="2" Grid.Column="0" 
                                Text="📍" 
@@ -252,7 +251,7 @@
                                 HeightRequest="40" 
                                 WidthRequest="60" 
                                 FontSize="11"
-                                Clicked="OnMapClicked" />
+                                Command="{Binding ShowMapCommand}" />
                     </Grid>
                 </VerticalStackLayout>
             </Border>
@@ -325,7 +324,7 @@
                         FontSize="14" 
                         FontAttributes="Bold" 
                         Margin="0,0,5,0"
-                        Clicked="OnBrowseProductsClicked" />
+                        Command="{Binding BrowseProductsCommand}" />
                 
                 <Button Grid.Column="1" 
                         Text="Visit Shop" 
@@ -336,7 +335,7 @@
                         FontSize="14" 
                         FontAttributes="Bold" 
                         Margin="5,0,0,0"
-                        Clicked="OnVisitShopClicked" />
+                        Command="{Binding VisitShopCommand}" />
             </Grid>
         </VerticalStackLayout>
     </ScrollView>

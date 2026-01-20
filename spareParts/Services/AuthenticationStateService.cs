@@ -11,15 +11,15 @@ namespace spareParts.Services
         private string _currentUserName = string.Empty;
         private string _currentUserEmail = string.Empty;
 
-        // Keys for storing authentication data
         private const string IsAuthenticatedKey = "IsAuthenticated";
         private const string UserNameKey = "CurrentUserName";
         private const string UserEmailKey = "CurrentUserEmail";
 
         private AuthenticationStateService()
         {
-            // Load authentication state from preferences on startup
-            LoadAuthenticationState();
+            // Note: We cannot await in a constructor. 
+            // We call an async initialization method.
+            _ = InitializeAsync();
         }
 
         public bool IsAuthenticated
@@ -61,53 +61,59 @@ namespace spareParts.Services
             }
         }
 
-        public void Login(string userName, string email)
+        public async Task InitializeAsync()
+        {
+            try
+            {
+                // SecureStorage only stores strings, so we convert "true"/"false" back to bool
+                var authStr = await SecureStorage.Default.GetAsync(IsAuthenticatedKey);
+                IsAuthenticated = authStr == "true";
+                
+                CurrentUserName = await SecureStorage.Default.GetAsync(UserNameKey) ?? string.Empty;
+                CurrentUserEmail = await SecureStorage.Default.GetAsync(UserEmailKey) ?? string.Empty;
+            }
+            catch (Exception)
+            {
+                // Possible if device doesn't support SecureStorage or user disabled screen lock
+                await Logout();
+            }
+        }
+
+        public async Task Login(string userName, string email)
         {
             CurrentUserName = userName;
             CurrentUserEmail = email;
             IsAuthenticated = true;
-            SaveAuthenticationState();
+            await SaveAuthenticationState();
         }
 
-        public void Logout()
+        public async Task Logout()
         {
             CurrentUserName = string.Empty;
             CurrentUserEmail = string.Empty;
             IsAuthenticated = false;
-            SaveAuthenticationState();
+            
+            // It is safer to RemoveAll or remove specific keys on logout
+            SecureStorage.Default.Remove(IsAuthenticatedKey);
+            SecureStorage.Default.Remove(UserNameKey);
+            SecureStorage.Default.Remove(UserEmailKey);
         }
 
-        private void LoadAuthenticationState()
+        private async Task SaveAuthenticationState()
         {
             try
             {
-                _isAuthenticated = Preferences.Get(IsAuthenticatedKey, false);
-                _currentUserName = Preferences.Get(UserNameKey, string.Empty);
-                _currentUserEmail = Preferences.Get(UserEmailKey, string.Empty);
+                await SecureStorage.Default.SetAsync(IsAuthenticatedKey, IsAuthenticated ? "true" : "false");
+                await SecureStorage.Default.SetAsync(UserNameKey, CurrentUserName);
+                await SecureStorage.Default.SetAsync(UserEmailKey, CurrentUserEmail);
             }
             catch (Exception)
             {
-                _isAuthenticated = false;
-                _currentUserName = string.Empty;
-                _currentUserEmail = string.Empty;
-            }
-        }
-
-        private void SaveAuthenticationState()
-        {
-            try
-            {
-                Preferences.Set(IsAuthenticatedKey, _isAuthenticated);
-                Preferences.Set(UserNameKey, _currentUserName);
-                Preferences.Set(UserEmailKey, _currentUserEmail);
-            }
-            catch (Exception)
-            {
+                // Handle potential errors (e.g., storage full or hardware issues)
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

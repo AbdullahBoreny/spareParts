@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="spareParts.PageViews.Authentication.ShopRegistrationPage"
+             Title="ShopRegistrationPage">
+    
+
+    <VerticalStackLayout Spacing="20" Padding="30">
+        <Grid ColumnDefinitions="*, *" HeightRequest="4">
+            <BoxView Grid.Column="0" Color="#E65100" />
+            <BoxView Grid.Column="1" Color="#E65100" />
+        </Grid>
+        
+        <Label Text="Shop Details" FontSize="24" TextColor="White" FontAttributes="Bold" />
+        <Label Text="Tell us about your business" TextColor="#8899AA" />
+
+        <Border StrokeShape="RoundRectangle 10" BackgroundColor="#22334499">
+            <Entry Placeholder="Shop Name" Text="{Binding ShopName}" TextColor="White" />
+        </Border>
+
+        <Border StrokeShape="RoundRectangle 10" BackgroundColor="#22334499">
+            <Editor Placeholder="Business Address" Text="{Binding ShopAddress}" HeightRequest="100" />
+        </Border>
+
+        <Button Text="FINISH &amp; CREATE SHOP" 
+                BackgroundColor="#E65100" 
+                Command="{Binding CompleteRegistrationCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

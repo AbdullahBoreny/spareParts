@@ -64,16 +64,46 @@ namespace spareParts.ViewModels.Authentication
                 await Shell.Current.DisplayAlert("Error", "Password must be at least 6 characters long", "OK");
                 return;
             }
+            if (IsShopOwner)
+            {
+                var navigationParameter = new Dictionary<string, object>
+                {
+                    { "BasicInfo", new SignupRequest { 
+                        Name = Name, 
+                        UserEmail = UserEmail, 
+                        Password = Password, 
+                        IsShopOwner = true 
+                    }}
+                };
 
+                await Shell.Current.GoToAsync("ShopRegistrationPage", navigationParameter);
+            }
+            else
+            {
+                await PerformRegistration(new SignupRequest {
+                    Name = Name, 
+                    UserEmail = UserEmail, 
+                    Password = Password, 
+                    IsShopOwner = false 
+                });
+            }
+        }
+
+        private async Task NavigateToLoginAsync()
+        {
+            await NavigationService.SetRoot("LoginPage");
+        }
+
+        private async Task PerformRegistration(SignupRequest signupRequest)
+        {
             try
             {
-                SignupRequest signupRequest = new SignupRequest() { UserEmail = UserEmail, Password = Password, Name = Name, IsShopOwner =  IsShopOwner};
                 string responseString = await apiService.PostAsync("Signup", signupRequest);
-                var response = System.Text.Json.JsonSerializer.Deserialize<signupResponse>(responseString);
+                var response = System.Text.Json.JsonSerializer.Deserialize<SignupResponse>(responseString);
                 if (response.Success)
                 {
                     var authStateService = AuthenticationStateService.Instance;
-                    authStateService.Login(Name, UserEmail);
+                    await authStateService.Login(Name, UserEmail);
                     
                     await Shell.Current.DisplayAlert("Success", "Account created successfully!", "OK");
                     
@@ -100,27 +130,23 @@ namespace spareParts.ViewModels.Authentication
                 await Shell.Current.DisplayAlert("Error", $"Registration failed: {ex.Message}", "OK");
             }
         }
+    }
 
-        private async Task NavigateToLoginAsync()
-        {
-            await NavigationService.SetRoot("LoginPage");
-        }
-        private class signupResponse
-        {
-            public bool Success { get; set; }
+    public class SignupResponse
+    {
+        public bool Success { get; set; }
 
-            public string Message { get; set; }
-        }
+        public string Message { get; set; }
+    }
 
-        public class SignupRequest
-        {
-            public string UserEmail { get; set; }
+    public class SignupRequest
+    {
+        public string UserEmail { get; set; }
 
-            public string Password { get; set; }
+        public string Password { get; set; }
 
-            public string Name { get; set; }
+        public string Name { get; set; }
 
-            public bool IsShopOwner { get; set; }
-        }
+        public bool IsShopOwner { get; set; }
     }
 }

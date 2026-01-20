@@ -4,6 +4,8 @@
              xmlns:converters="clr-namespace:spareParts.Converters"
              xmlns:services="clr-namespace:spareParts.Services"
              x:Class="spareParts.PageViews.Customer.ProfilePage"
+             xmlns:viewmodels="clr-namespace:spareParts.ViewModels.Customer"
+             BackgroundColor="#121B2B"
              Title="Profile">
 
     <ContentPage.Resources>
@@ -13,144 +15,101 @@
     </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="20">
-            <!-- Authentication Check -->
-            <VerticalStackLayout IsVisible="{Binding Source={x:Static services:AuthenticationStateService.Instance}, Path=IsAuthenticated, Converter={StaticResource InvertBoolConverter}}"
-                                 Spacing="20"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center"
-                                 Margin="0,50,0,50">
-                <Label Text="Please Sign In"
-                       FontSize="20"
-                       FontAttributes="Bold"
-                       TextColor="#E74C3C"
-                       HorizontalOptions="Center" />
-                <Label Text="Sign in to view your profile and order history."
-                       FontSize="14"
-                       TextColor="Gray"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center" />
-                <Button Text="Go to Home to Sign In"
-                        BackgroundColor="#3498DB"
-                        TextColor="White"
-                        CornerRadius="8"
-                        HeightRequest="45"
-                        WidthRequest="200"
-                        FontSize="16"
-                        x:Name="GoToHomeButton" />
-            </VerticalStackLayout>
+        <VerticalStackLayout Spacing="25" Padding="20">
             
-            <!-- Profile Content (Visible when authenticated) -->
-            <VerticalStackLayout IsVisible="{Binding Source={x:Static services:AuthenticationStateService.Instance}, Path=IsAuthenticated}"
-                                 Spacing="20">
-                <Label Text="My Profile" 
-                       FontSize="24" 
-                       FontAttributes="Bold" 
-                       HorizontalOptions="Center" />
-            
-            <Border BackgroundColor="White" 
-                   StrokeShape="RoundRectangle 10" 
-                   Padding="20">
-                     <Border.Shadow>
-                            <Shadow Brush="Black"
-                                   Offset="5,5"
-                                   Radius="10"
-                                   Opacity="0.5" />
-                     </Border.Shadow>
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="Personal Information" 
-                           FontSize="18" 
-                           FontAttributes="Bold" />
-                    
-                    <Entry Placeholder="Full Name" 
-                           x:Name="NameEntry" />
-                    
-                    <Entry Placeholder="Email" 
-                           x:Name="EmailEntry" 
-                           Keyboard="Email" />
-                    
-                    <Entry Placeholder="Phone Number" 
-                           x:Name="PhoneEntry" 
-                           Keyboard="Telephone" />
-                    
-                    <Entry Placeholder="Address" 
-                           x:Name="AddressEntry" />
-                    
-                    <Button Text="Update Profile" 
-                            BackgroundColor="Blue" 
-                            TextColor="White" 
-                            CornerRadius="8" 
-                            HeightRequest="45" />
+            <VerticalStackLayout Spacing="20">
+                <VerticalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,10,0,10">
+                    <Border Stroke="#F35D07"
+                            StrokeThickness="2"
+                            HeightRequest="100"
+                            WidthRequest="100"
+                            StrokeShape="RoundRectangle 50"
+                            BackgroundColor="#1E2738"
+                            HorizontalOptions="Center">
+                        <Label Text="👤" FontSize="50" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    </Border>
+                    <Label Text="{Binding CurrentUserName}" 
+                           FontSize="22" 
+                           FontAttributes="Bold" 
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding CurrentUserEmail}" 
+                           FontSize="14" 
+                           TextColor="#8A92A6"
+                           HorizontalOptions="Center" />
                 </VerticalStackLayout>
-            </Border>
-            
-            <Border BackgroundColor="White"
-                   StrokeShape="RoundRectangle 10" 
-                   Padding="20">
-                <Border.Shadow>
-                    <Shadow Brush="Black"
-                            Offset="5,5"
-                            Radius="10"
-                            Opacity="0.5" />
-                </Border.Shadow>
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="Order History" 
-                           FontSize="18" 
-                           FontAttributes="Bold" />
-                    
-                    <CollectionView x:Name="OrdersCollection" 
-                                    HeightRequest="200">
+
+                <Label Text="ACCOUNT SETTINGS" FontSize="12" FontAttributes="Bold" TextColor="#F35D07" CharacterSpacing="1" Margin="5,0,0,0"/>
+                
+                <Border BackgroundColor="#1E2738" 
+                        Stroke="#2A3547"
+                        StrokeShape="RoundRectangle 15" 
+                        Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Full Name" FontSize="12" TextColor="#8A92A6" Margin="5,0"/>
+                            <Entry x:Name="NameEntry" TextColor="White" BackgroundColor="#121B2B" HeightRequest="45" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Phone Number" FontSize="12" TextColor="#8A92A6" Margin="5,0"/>
+                            <Entry x:Name="PhoneEntry" TextColor="White" BackgroundColor="#121B2B" HeightRequest="45" Keyboard="Telephone" />
+                        </VerticalStackLayout>
+                        
+                        <Button Text="SAVE CHANGES" 
+                                BackgroundColor="#F35D07" 
+                                TextColor="White" 
+                                FontAttributes="Bold"
+                                CornerRadius="10" 
+                                HeightRequest="45" 
+                                Margin="0,10,0,0"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="RECENT ORDERS" FontSize="12" FontAttributes="Bold" TextColor="#F35D07" CharacterSpacing="1" Margin="5,10,0,0"/>
+                
+                <Border BackgroundColor="#1E2738"
+                        Stroke="#2A3547"
+                        StrokeShape="RoundRectangle 15" 
+                        Padding="5">
+                    <CollectionView x:Name="OrdersCollection" HeightRequest="180">
+                        <CollectionView.EmptyView>
+                            <Label Text="No orders found" TextColor="#8A92A6" HorizontalOptions="Center" Margin="20"/>
+                        </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="5">
-                                    <Border BackgroundColor="LightGray" 
-                                           StrokeShape="RoundRectangle 5" 
-                                           Padding="10">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            
-                                            <Label Grid.Row="0" 
-                                                   Text="{Binding OrderNumber}" 
-                                                   FontSize="14" 
-                                                   FontAttributes="Bold" />
-                                            
-                                            <Label Grid.Row="1" 
-                                                   Text="{Binding OrderDate, StringFormat='{0:MMM dd, yyyy}'}" 
-                                                   FontSize="12" 
-                                                   TextColor="Gray" />
-                                            
-                                            <Label Grid.Row="0" 
-                                                   Grid.RowSpan="2" 
-                                                   Grid.Column="1" 
-                                                   Text="{Binding Total, StringFormat='${0:F2}'}" 
-                                                   FontSize="14" 
-                                                   FontAttributes="Bold" 
-                                                   TextColor="Green" 
-                                                   HorizontalOptions="End" />
-                                        </Grid>
-                                    </Border>
+                                <Grid Padding="15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                        <Label Text="{Binding OrderNumber}" TextColor="White" FontAttributes="Bold" FontSize="14" />
+                                        <Label Text="{Binding OrderDate, StringFormat='{0:MMM dd, yyyy}'}" TextColor="#8A92A6" FontSize="12" />
+                                    </VerticalStackLayout>
+                                    
+                                    <Label Grid.Column="1" 
+                                           Text="{Binding Total, StringFormat='${0:F2}'}" 
+                                           TextColor="#F35D07"
+                                           FontAttributes="Bold" 
+                                           VerticalOptions="Center" />
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                </VerticalStackLayout>
-            </Border>
-            
-            <Button Text="Sign Out" 
-                    BackgroundColor="Red" 
-                    TextColor="White" 
-                    CornerRadius="8" 
-                    HeightRequest="50" 
-                    x:Name="SignOutButton" />
+                </Border>
+                
+                <Button Text="LOG OUT" 
+                        BackgroundColor="Transparent" 
+                        TextColor="#E74C3C" 
+                        BorderColor="#E74C3C"
+                        BorderWidth="1"
+                        CornerRadius="10" 
+                        HeightRequest="50" 
+                        Margin="0,10,0,30"
+                        x:Name="SignOutButton" />
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

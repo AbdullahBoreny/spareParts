@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:spareParts.Converters"
              xmlns:services="clr-namespace:spareParts.Services"
+             xmlns:viewmodels="clr-namespace:spareParts.ViewModels.Customer"
              x:Class="spareParts.PageViews.Customer.CartPage"
              Title="Shopping Cart">
 
