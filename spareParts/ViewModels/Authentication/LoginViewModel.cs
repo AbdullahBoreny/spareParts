@@ -53,7 +53,7 @@ namespace spareParts.ViewModels.Authentication
                 if (response.Success)
                 {
                     var authStateService = AuthenticationStateService.Instance;
-                    await authStateService.Login(response.Username, Mail);
+                    await authStateService.Login(response.Username, Mail, Guid.Parse(response.UserID));
 
                     await Shell.Current.DisplayAlert("Success", "Login successful!", "OK");
 
@@ -93,6 +93,7 @@ namespace spareParts.ViewModels.Authentication
             public bool Success { get; set; }
             public string Message { get; set; }
             public string Username { get; set; }
+            public string UserID {get; set;}
         }
     }
 }

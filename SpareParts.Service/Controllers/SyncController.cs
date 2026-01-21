@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 
 namespace SpareParts.Service.Controllers
@@ -24,10 +25,6 @@ namespace SpareParts.Service.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] LoginRequest model)
         {
-            if (model == null)
-            {
-                return BadRequest("Model is null — JSON not bound");
-            }
             string Username = model.Email;
             string UserPassword = model.Password;
 
@@ -49,15 +46,16 @@ namespace SpareParts.Service.Controllers
                             {
                                 int passwordID = reader.GetOrdinal("UserPassword");
                                 int userNameID = reader.GetOrdinal("UserName");
+                                int userIDOrdinal = reader.GetOrdinal("UserID");
 
                                 string password = reader.GetString(passwordID);
                                 string username = reader.GetString(userNameID);
-
+                                string userID = reader.GetString(userIDOrdinal);
                                 bool isValid = BCrypt.Net.BCrypt.Verify(UserPassword, password);
 
                                 if (!isValid) return Unauthorized(new { Success = false, Message = "Invalid Password"});
 
-                                return Ok(new { Success = true, Username = username});
+                                return Ok(new { Success = true, Username = username, UserID = userID});
                             }
                             else
                             {

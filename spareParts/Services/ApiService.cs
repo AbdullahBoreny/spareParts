@@ -10,11 +10,13 @@ namespace spareParts.Services
     {
         public HttpClient _httpClient;
         public string _baseUrl;
+        public string _hubUrl;
 
         public ApiService()
         {
             _httpClient = new HttpClient();
             _baseUrl = "http://20.64.249.9/SpareParts/api/sync"; // TODO: Configure from app settings
+            _hubUrl = "http://20.64.249.9/SpareParts/";
         }
 
         public async Task<T> GetAsync<T>(string endpoint)
