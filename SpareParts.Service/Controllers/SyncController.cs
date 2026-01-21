@@ -95,8 +95,9 @@ namespace SpareParts.Service.Controllers
 
             DateTime UserCreationDate = DateTime.Now;
 
-            string shortName = (firstName.Length >= 2 ? firstName.Substring(0,2) : firstName) + (lastName.Length >= 2 ? lastName.Substring(0,2) : lastName);
+            string shortName = (firstName.Length >= 2 ? firstName.Substring(0,2) : firstName) + (lastName.Length >=2 ? lastName.Substring(0,2) : lastName);
             bool isAllowed = true;
+            
             
             try
             {
@@ -107,8 +108,8 @@ namespace SpareParts.Service.Controllers
                     {
                         command1.Connection = connection;
                         command1.CommandType = System.Data.CommandType.Text;
-                        command1.CommandText = "SELECT 1 FROM Security.Users " +
-                            "WHERE UserEmail = @userEmail";
+                        command1.CommandText = "SELECT 1 FROM Security.Users  " +
+                            "WHERE UserEmail  = @userEmail";
                         command1.Parameters.AddWithValue("@userEmail", userEmail);
 
                         using (SqlDataReader reader = command1.ExecuteReader()) 
@@ -125,8 +126,8 @@ namespace SpareParts.Service.Controllers
                         {
                             command.Connection = connection;
                             command.CommandType = System.Data.CommandType.Text;
-                            command.CommandText = "INSERT INTO Security.Users " +
-                                "( " +
+                            command.CommandText = "INSERT INTO Security.Users  " +
+                                "(  " +
                                     "UserID" +
                                     ", UserName" +
                                     ", UserNameShort" +
