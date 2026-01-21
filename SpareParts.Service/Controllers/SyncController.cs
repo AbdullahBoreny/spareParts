@@ -54,13 +54,13 @@ namespace SpareParts.Service.Controllers
                                 string userID = reader.GetGuid(userIDOrdinal).ToString();
                                 bool isValid = BCrypt.Net.BCrypt.Verify(UserPassword, password);
 
-                                if (!isValid) return Unauthorized(new { Success = false, Message = "Invalid Password"});
+                                if (!isValid) return Ok(new { Success = false, Message = "Invalid Password"});
 
                                 return Ok(new { Success = true, Username = username, UserID = userID});
                             }
                             else
                             {
-                                return Unauthorized(new { Success = false, Message = "User Not Found" });
+                                return Ok(new { Success = false, Message = "User Not Found" });
                             }
                         }
                     }

@@ -22,20 +22,8 @@ namespace spareParts.ViewModels.Authentication
 
         public ApiService apiService = new ApiService();
 
-
-
-        public ICommand SignupCommand { get; }
-        public ICommand NavigateToSignupCommand { get; }
-
-        public ICommand LoginAsyncCommand { get; }
-
-        public LoginViewModel()
-        {
-            NavigateToSignupCommand = new Command(async () =>  await NavigateToSignupAsync());
-            LoginAsyncCommand = new Command(() => LoginAsync());
-        }
-
-        private async void LoginAsync()
+        [RelayCommand]
+        public async Task Login()
         {
             if (string.IsNullOrWhiteSpace(Mail) || string.IsNullOrWhiteSpace(Password))
             {
@@ -64,7 +52,14 @@ namespace spareParts.ViewModels.Authentication
                 }
                 else
                 {
-                    await Shell.Current.DisplayAlert("Error", "Invalid email or password", "OK");
+                    if (string.IsNullOrEmpty(response.Message))
+                    {
+                        await Shell.Current.DisplayAlert("Error", response.Message, "OK");
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("Error", "Invalid email or password", "OK");
+                    }
 
                     IsLoading = false;
                 }
@@ -76,8 +71,8 @@ namespace spareParts.ViewModels.Authentication
                 IsLoading = false;
             }
         }
-
-        private async Task NavigateToSignupAsync()
+        [RelayCommand]
+        public async Task NavigateToSignupAsync()
         {
             await NavigationService.SetRoot("SignupPage");
         }

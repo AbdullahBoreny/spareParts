@@ -13,13 +13,10 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
-        Routing.RegisterRoute("LoginPage", typeof(LoginPage));
-        Routing.RegisterRoute("SignupPage", typeof(SignupPage));
         Routing.RegisterRoute("AddProductPage", typeof(AddProductPage));
         Routing.RegisterRoute("OrdersPage", typeof(OrdersPage));
         Routing.RegisterRoute("ShopDashboardPage", typeof(ShopDashboardPage));
         Routing.RegisterRoute("ShopDetailsPage", typeof(ShopDetailsPage));
-        Routing.RegisterRoute("AppShellWithBottomTabs", typeof(AppShellWithBottomTabs));
         Routing.RegisterRoute("MainTabbedPage", typeof(MainTabbedPage));
         Routing.RegisterRoute("CartPage", typeof(CartPage));
         Routing.RegisterRoute("HomePage", typeof(HomePage));

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel.Communication;
 using spareParts.PageViews;
 using spareParts.PageViews.Authentication;
@@ -11,7 +12,7 @@ namespace spareParts.ViewModels.Authentication
 {
     public partial class SignupViewModel : ObservableObject
     {
-        private readonly ApiService apiService;
+        private readonly ApiService apiService = new ApiService();
 
         [ObservableProperty]
         public partial string Name { get; set; }
@@ -34,17 +35,10 @@ namespace spareParts.ViewModels.Authentication
             get => !IsShopOwner;
             set => IsShopOwner = !value;
         }
-        public SignupViewModel()
-        {
-            apiService = new ApiService();
-            SignupCommand = new Command(async () => await SignupAsync());
-            NavigateToLoginCommand = new Command(async () => await NavigateToLoginAsync());
-        }
 
-        public ICommand SignupCommand { get; }
-        public ICommand NavigateToLoginCommand { get; }
-
-        private async Task SignupAsync()
+        
+        [RelayCommand]
+        public async Task Signup()
         {
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(UserEmail) || 
                 string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(ConfirmPassword))
@@ -64,40 +58,9 @@ namespace spareParts.ViewModels.Authentication
                 await Shell.Current.DisplayAlert("Error", "Password must be at least 6 characters long", "OK");
                 return;
             }
-            // if (IsShopOwner)
-            // {
-            //     var navigationParameter = new Dictionary<string, object>
-            //     {
-            //         { "BasicInfo", new SignupRequest { 
-            //             Name = Name, 
-            //             UserEmail = UserEmail, 
-            //             Password = Password, 
-            //             IsShopOwner = true 
-            //         }}
-            //     };
-
-            //     await Shell.Current.GoToAsync("ShopRegistrationPage", navigationParameter);
-            // }
-            // else
-            // {
-            await PerformRegistration(new SignupRequest {
-                Name = Name, 
-                UserEmail = UserEmail, 
-                Password = Password, 
-                IsShopOwner = false 
-            });
-            // }
-        }
-
-        private async Task NavigateToLoginAsync()
-        {
-            await NavigationService.SetRoot("LoginPage");
-        }
-
-        private async Task PerformRegistration(SignupRequest signupRequest)
-        {
             try
             {
+                SignupRequest signupRequest = new SignupRequest { FullName = Name, Email = UserEmail, Password = Password,IsShopOwner = IsShopOwner };
                 string responseString = await apiService.PostAsync("Signup", signupRequest);
                 var response = System.Text.Json.JsonSerializer.Deserialize<SignupResponse>(responseString);
                 if (response.Success)
@@ -109,7 +72,7 @@ namespace spareParts.ViewModels.Authentication
                     
                     if (Application.Current is App app)
                     {
-                        await NavigationService.SetRoot("AppShellWithBottomTabs");
+                        Application.Current.MainPage = new AppShellWithBottomTabs();
                     }
                 }
                 else
@@ -122,13 +85,17 @@ namespace spareParts.ViewModels.Authentication
                     {
                         await Shell.Current.DisplayAlert("Error", "Registration failed. Please try again.", "OK");
                     }
-                    
                 }
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Error", $"Registration failed: {ex.Message}", "OK");
             }
+        }
+        [RelayCommand]
+        public async Task NavigateToLogin()
+        {
+            await NavigationService.SetRoot("LoginPage");
         }
     }
 
@@ -143,11 +110,11 @@ namespace spareParts.ViewModels.Authentication
 
     public class SignupRequest
     {
-        public string UserEmail { get; set; }
+        public string Email { get; set; }
 
         public string Password { get; set; }
 
-        public string Name { get; set; }
+        public string FullName { get; set; }
 
         public bool IsShopOwner { get; set; }
     }
