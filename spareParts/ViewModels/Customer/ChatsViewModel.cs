@@ -16,7 +16,7 @@ namespace spareParts.ViewModels.Customer
                 hubConnection = new HubConnectionBuilder()
                     .WithUrl($"{apiService._hubUrl}/ChatHub", options =>
                     {
-                        options.Headers.Add("ClientId", Guid.NewGuid().ToString());
+                        options.Headers.Add("ClientId", _authService.CurrentUserID.ToString());
                     })
                     .WithAutomaticReconnect()
                     .Build();

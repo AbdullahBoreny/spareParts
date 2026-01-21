@@ -103,7 +103,7 @@ namespace spareParts.ViewModels.Authentication
                 if (response.Success)
                 {
                     var authStateService = AuthenticationStateService.Instance;
-                    await authStateService.Login(Name, UserEmail);
+                    await authStateService.Login(Name, UserEmail, response.UserID);
                     
                     await Shell.Current.DisplayAlert("Success", "Account created successfully!", "OK");
                     
@@ -137,6 +137,8 @@ namespace spareParts.ViewModels.Authentication
         public bool Success { get; set; }
 
         public string Message { get; set; }
+
+        public Guid UserID {get; set;}
     }
 
     public class SignupRequest

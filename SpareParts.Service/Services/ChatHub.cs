@@ -6,7 +6,7 @@ namespace SpareParts.Service.Services
     {
         public async Task sendMessage(string user, string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Clients.All.SendAsync("Message", user, message);
         }
     }
 }
