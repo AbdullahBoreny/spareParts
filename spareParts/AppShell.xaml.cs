@@ -39,12 +39,7 @@ public partial class AppShell : Shell
         }
         else
         {
-            await NavigationService.GoTo("LoginPage");
+            await NavigationService.SetRoot("LoginPage");
         }
-    }
-
-    protected override void OnParentSet()
-    {
-        base.OnHandlerChanged();
     }
 }

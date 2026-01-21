@@ -5,42 +5,48 @@ using spareParts.Services;
 using System.Collections.ObjectModel;
 using spareParts.PageViews.Customer;
 using System.Windows.Input;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace spareParts.ViewModels.Customer
 {
     public partial class HomeViewModel : ObservableObject
     {
-        private AuthenticationStateService _authService;
+
+        public HubConnection hubConnection;
+        public AuthenticationStateService _authService;
 
         [ObservableProperty]
         public partial ObservableCollection<ShopWithProducts> Shops {get; set;}
 
         [ObservableProperty]
-        private partial string WelcomeMessage {get; set;}
+        public partial string WelcomeMessage {get; set;}
 
         [ObservableProperty]
-        private partial string UserEmail {get; set;}
+        public partial string UserEmail {get; set;}
 
         [ObservableProperty]
-        private partial bool IsAuthenticated {get; set;}
+        public partial bool IsAuthenticated {get; set;}
 
         public HomeViewModel()
         {
             _authService = AuthenticationStateService.Instance;
-            LoadSampleShops();
-            UpdateAuthState();
+            MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await UpdateAuthState();
+                LoadSampleShops();
+
+            });
         }
 
-        private async void UpdateAuthState()
+        public async Task UpdateAuthState()
         {
             await AuthenticationStateService.Instance.InitializeAsync();
-            IsAuthenticated = _authService.IsAuthenticated;
-            WelcomeMessage = $"Welcome back, {_authService.CurrentUserName}!";
+            WelcomeMessage = _authService.CurrentUserName + " !";
             UserEmail = _authService.CurrentUserEmail;
         }
 
         [RelayCommand]
-        private async Task Logout()
+        public async Task Logout()
         {
             bool answer = await Shell.Current.DisplayAlert("Logout", "Are you sure?", "Yes", "No");
             if (answer)
@@ -49,13 +55,13 @@ namespace spareParts.ViewModels.Customer
             }
         }
         [RelayCommand]
-        private async Task ViewShop(ShopWithProducts shop)
+        public async Task ViewShop(ShopWithProducts shop)
         {
             if (shop == null) return;
             await Shell.Current.Navigation.PushAsync(new ShopDetailsPage(shop));
         }
 
-        private void LoadSampleShops()
+        public void LoadSampleShops()
         {
             Shops = new ObservableCollection<ShopWithProducts>
             {
@@ -157,7 +163,7 @@ namespace spareParts.ViewModels.Customer
             };
         }
 
-        private async void OnContactShopClicked(object sender, EventArgs e)
+        public async void OnContactShopClicked(object sender, EventArgs e)
         {
             if (sender is Button button && button.BindingContext is ShopWithProducts shop)
             {

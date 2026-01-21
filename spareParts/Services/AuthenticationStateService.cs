@@ -10,7 +10,7 @@ namespace spareParts.Services
         private bool _isAuthenticated;
         private string _currentUserName = string.Empty;
         private string _currentUserEmail = string.Empty;
-        private Guid _currentUserID = Guid.Empty;
+        private string _currentUserID = string.Empty;
 
         private const string IsAuthenticatedKey = "IsAuthenticated";
         private const string UserNameKey = "CurrentUserName";
@@ -63,14 +63,14 @@ namespace spareParts.Services
             }
         }
 
-        public Guid CurrentUserID
+        public string CurrentUserID
         {
-            get => CurrentUserID;
+            get => _currentUserID;
             private set
             {
-                if (CurrentUserID != value)
+                if (_currentUserID != value)
                 {
-                    CurrentUserID = value;
+                    _currentUserID = value;
                     OnPropertyChanged(nameof(CurrentUserID));
                 }
             }
@@ -86,8 +86,7 @@ namespace spareParts.Services
                 
                 CurrentUserName = await SecureStorage.Default.GetAsync(UserNameKey) ?? string.Empty;
                 CurrentUserEmail = await SecureStorage.Default.GetAsync(UserEmailKey) ?? string.Empty;
-                var useridString = await SecureStorage.Default.GetAsync(UserIDKey);
-                CurrentUserID = Guid.Parse(useridString);
+                CurrentUserID = await SecureStorage.Default.GetAsync(UserIDKey) ?? string.Empty;
             }
             catch (Exception)
             {
@@ -96,7 +95,7 @@ namespace spareParts.Services
             }
         }
 
-        public async Task Login(string userName, string email, Guid userID)
+        public async Task Login(string userName, string email, string userID)
         {
             CurrentUserName = userName;
             CurrentUserEmail = email;
@@ -110,7 +109,7 @@ namespace spareParts.Services
             CurrentUserName = string.Empty;
             CurrentUserEmail = string.Empty;
             IsAuthenticated = false;
-            CurrentUserID = Guid.Empty;
+            CurrentUserID = string.Empty;
             
             // It is safer to RemoveAll or remove specific keys on logout
             SecureStorage.Default.Remove(IsAuthenticatedKey);
@@ -126,7 +125,7 @@ namespace spareParts.Services
                 await SecureStorage.Default.SetAsync(IsAuthenticatedKey, IsAuthenticated ? "true" : "false");
                 await SecureStorage.Default.SetAsync(UserNameKey, CurrentUserName);
                 await SecureStorage.Default.SetAsync(UserEmailKey, CurrentUserEmail);
-                await SecureStorage.Default.SetAsync(UserIDKey, CurrentUserID.ToString());
+                await SecureStorage.Default.SetAsync(UserIDKey, CurrentUserID);
             }
             catch (Exception)
             {

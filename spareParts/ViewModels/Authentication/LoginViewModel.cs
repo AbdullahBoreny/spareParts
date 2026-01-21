@@ -53,9 +53,7 @@ namespace spareParts.ViewModels.Authentication
                 if (response.Success)
                 {
                     var authStateService = AuthenticationStateService.Instance;
-                    await authStateService.Login(response.Username, Mail, Guid.Parse(response.UserID));
-
-                    await Shell.Current.DisplayAlert("Success", "Login successful!", "OK");
+                    await authStateService.Login(response.Username, Mail, response.UserID);
 
                     if (Application.Current is App app)
                     {

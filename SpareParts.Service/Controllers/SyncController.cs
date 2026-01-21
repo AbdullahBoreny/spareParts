@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.Data.SqlClient;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -50,7 +51,7 @@ namespace SpareParts.Service.Controllers
 
                                 string password = reader.GetString(passwordID);
                                 string username = reader.GetString(userNameID);
-                                string userID = reader.GetString(userIDOrdinal);
+                                string userID = reader.GetGuid(userIDOrdinal).ToString();
                                 bool isValid = BCrypt.Net.BCrypt.Verify(UserPassword, password);
 
                                 if (!isValid) return Unauthorized(new { Success = false, Message = "Invalid Password"});
@@ -84,30 +85,30 @@ namespace SpareParts.Service.Controllers
 
             string[] splitname = fullName.Split(' ');
             string firstName = "";
-            string LastNmae = "";
+            string lastName = "";
 
             firstName = splitname[0];
             if (splitname.Length > 1)
             {
-                LastNmae = splitname[1];
+                lastName = splitname[1];
             }
 
-            DateTime UserCreationDate = new DateTime();
-            string shortName = firstName.Substring(0,2) + LastNmae.Substring(0,2);
+            DateTime UserCreationDate = DateTime.Now;
+
+            string shortName = (firstName.Length >= 2 ? firstName.Substring(0,2) : firstName) + (lastName.Length >= 2 ? lastName.Substring(0,2) : lastName);
             bool isAllowed = true;
-
-
+            
             try
             {
-                using (SqlConnection connection = new SqlConnection("SpareParts"))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     using (SqlCommand command1 = new SqlCommand())
                     {
                         command1.Connection = connection;
                         command1.CommandType = System.Data.CommandType.Text;
-                        command1.CommandText = "SELECT 1 FROM Security.Users" +
-                            "WHERE UserEmail= @userEmail";
+                        command1.CommandText = "SELECT 1 FROM Security.Users " +
+                            "WHERE UserEmail = @userEmail";
                         command1.Parameters.AddWithValue("@userEmail", userEmail);
 
                         using (SqlDataReader reader = command1.ExecuteReader()) 
@@ -124,42 +125,58 @@ namespace SpareParts.Service.Controllers
                         {
                             command.Connection = connection;
                             command.CommandType = System.Data.CommandType.Text;
-                            command.CommandText = "INSERT INTO Security.Users" +
-                                "(" +
+                            command.CommandText = "INSERT INTO Security.Users " +
+                                "( " +
                                     "UserID" +
                                     ", UserName" +
                                     ", UserNameShort" +
                                     ", UserEmail" +
                                     ", UserPassword" +
-                                    ", UserMobileNumber" +
-                                    ", UserGender" +
                                     ", UserCreationDate" +
-                                    ", UserIsAuthenticated" +
-                                ")" +
-                                "Values" +
-                                "(" +
+                                    ", UserRoleID " +
+                                ") " +
+                                "Values " +
+                                "( " +
                                     "@UserID" +
                                     ", @fullName" +
                                     ", @shortName" +
                                     ", @userEmail" +
                                     ", @userPassword" +
-                                    ", @UserMobileNumber" +
-                                    ", @UserGender" +
                                     ", @UserCreationDate" +
-                                    ", @UserIsAuthenticated" +
+                                    ", @UserRoleID " +
                                 ")";
                             command.Parameters.AddWithValue("@UserID", UserGuid);
                             command.Parameters.AddWithValue("@fullName", fullName);
                             command.Parameters.AddWithValue("@shortName", shortName);
                             command.Parameters.AddWithValue("@UserEmail", userEmail);
                             command.Parameters.AddWithValue("@userPassword", BCrypt.Net.BCrypt.HashPassword(userPassword));
-                            command.Parameters.AddWithValue("@UserCreationDate", UserCreationDate);
-                            command.Parameters.AddWithValue("@UserIsAuthenticated", true);
+                            command.Parameters.AddWithValue("@UserCreationDate", UserCreationDate.ToString());
                             command.Parameters.AddWithValue("@UserRoleID", isShopOwner ? 3 : 2);
 
                             command.ExecuteNonQuery();
                         }
-                        return Ok(new {Success = true});
+                        // if (isShopOwner)
+                        // {
+                        //     using (SqlCommand command2 = new SqlCommand())
+                        //     {
+                        //         command2.Connection = connection;
+                        //         command2.CommandType = System.Data.CommandType.Text;
+                        //         command2.CommandText = "INSERT INTO General.Shops " +
+                        //          "( " +
+                        //             "ShopID " +
+                        //             ", ShopName " +
+                        //             ", ShopOwnerID " +
+                        //             ", ShopLocation " +
+                        //             ", ShopCreationDate " +
+                        //         ")" +
+                        //         "VALUES " +
+                        //             "( " +
+                        //                 ""
+                        //             ")"
+                        //         ;
+                        //     }
+                        // }
+                        return Ok(new {Success = true, UserID = UserGuid});
                     }
                     else
                     {
@@ -172,22 +189,91 @@ namespace SpareParts.Service.Controllers
                 return BadRequest(new { Success = false, Message = ex.Message });
             }
         }
+
+        [HttpPost("GetChats")]
+        public IActionResult GetChats([FromBody] ChatsRequest model)
+        {
+            Guid userID = model.UserID;
+            List<ChatRecord> chatRecords = new List<ChatRecord>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
+                        command.CommandText = "spGetUserChats";
+                        command.Parameters.AddWithValue("@UserID", userID);
+                        using(SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int contactIdOrdinal = reader.GetOrdinal("ContactID");
+                                int contactNameOrdinal = reader.GetOrdinal("ContactName");
+                                int LastMessageOrdinal = reader.GetOrdinal("LastMessage");
+                                int LastMessageTimeOrdinal = reader.GetOrdinal("LastMessageTime");
+                                int UnreadCountOrdinal = reader.GetOrdinal("UnreadCount");
+
+                                Guid contactID = reader.GetGuid(contactIdOrdinal);
+                                string ContactName = reader.GetString(contactNameOrdinal);
+                                string LastMessage = reader.GetString(LastMessageOrdinal);
+                                DateTime LastMessageTime = reader.GetDateTime(LastMessageTimeOrdinal);
+                                int UnreadCount = reader.GetInt32(UnreadCountOrdinal);
+
+                                chatRecords.Add(new ChatRecord()
+                                {
+                                    ContactID = contactID,
+                                    ContactName = ContactName,
+                                    LastMessage = LastMessage,
+                                    LastMessageTime = LastMessageTime,
+                                    UnreadCount = UnreadCount
+                                });
+                            }
+                            return Ok(new {Success = true, result =  chatRecords.ToString()});
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+        }
     }
     public class LoginRequest
-        {
-            public string Email { get; set;}
-            public string Password { get; set;}
-        }
+    {
+        public string Email { get; set;}
+        public string Password { get; set;}
+    }
 
-        public class SignupRequest
-        {
-            public string Email { get; set;}
-            public string Password { get; set;}
+    public class SignupRequest
+    {
+        public string Email { get; set;}
+        public string Password { get; set;}
 
-            public string FullName { get; set;}
+        public string FullName { get; set;}
 
-            public bool IsShopOwner { get; set;}
+        public bool IsShopOwner { get; set;}
 
-        }
+    }
+
+    public class ChatsRequest
+    {
+        public string Email {get; set;}
+        public Guid UserID {get; set;}
+    }
+
+    public class ChatRecord
+    {
+        public Guid ContactID {get; set;}
+        public string ContactName {get; set;}
+        public string LastMessage {get; set;}
+        public DateTime LastMessageTime {get; set;}
+        public int UnreadCount {get;set;}
+    }
 
 }

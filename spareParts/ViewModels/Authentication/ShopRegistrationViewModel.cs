@@ -6,19 +6,24 @@ namespace spareParts.ViewModels.Authentication;
 public partial class ShopRegistrationViewModel : ObservableObject
 {
     [ObservableProperty]
-    private SignupRequest _basicInfo;
+    public partial SignupRequest _basicInfo {get; set;}
 
     [ObservableProperty]
-    private string _shopName;
+    public partial string ShopName {get; set;}
 
     [ObservableProperty]
-    private string _shopAddress;
+    public partial string ShopAddress {get; set;}
 
     [ObservableProperty]
-    private string _shopDescription;
+    public  partial string ShopDescription {get; set;}
+
+    public ShopRegistrationViewModel(Dictionary<string, object> keyValuePairs) 
+    {
+        
+    }
 
     [RelayCommand]
-    private async Task CompleteRegistration()
+    public async Task CompleteRegistration()
     {
         
     }

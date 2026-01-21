@@ -64,29 +64,29 @@ namespace spareParts.ViewModels.Authentication
                 await Shell.Current.DisplayAlert("Error", "Password must be at least 6 characters long", "OK");
                 return;
             }
-            if (IsShopOwner)
-            {
-                var navigationParameter = new Dictionary<string, object>
-                {
-                    { "BasicInfo", new SignupRequest { 
-                        Name = Name, 
-                        UserEmail = UserEmail, 
-                        Password = Password, 
-                        IsShopOwner = true 
-                    }}
-                };
+            // if (IsShopOwner)
+            // {
+            //     var navigationParameter = new Dictionary<string, object>
+            //     {
+            //         { "BasicInfo", new SignupRequest { 
+            //             Name = Name, 
+            //             UserEmail = UserEmail, 
+            //             Password = Password, 
+            //             IsShopOwner = true 
+            //         }}
+            //     };
 
-                await Shell.Current.GoToAsync("ShopRegistrationPage", navigationParameter);
-            }
-            else
-            {
-                await PerformRegistration(new SignupRequest {
-                    Name = Name, 
-                    UserEmail = UserEmail, 
-                    Password = Password, 
-                    IsShopOwner = false 
-                });
-            }
+            //     await Shell.Current.GoToAsync("ShopRegistrationPage", navigationParameter);
+            // }
+            // else
+            // {
+            await PerformRegistration(new SignupRequest {
+                Name = Name, 
+                UserEmail = UserEmail, 
+                Password = Password, 
+                IsShopOwner = false 
+            });
+            // }
         }
 
         private async Task NavigateToLoginAsync()
@@ -103,9 +103,9 @@ namespace spareParts.ViewModels.Authentication
                 if (response.Success)
                 {
                     var authStateService = AuthenticationStateService.Instance;
-                    await authStateService.Login(Name, UserEmail);
+                    await authStateService.Login(Name, UserEmail, response.UserID);
                     
-                    await Shell.Current.DisplayAlert("Success", "Account created successfully!", "OK");
+                    Shell.Current.DisplayAlert("Success", "Account created successfully!", "OK");
                     
                     if (Application.Current is App app)
                     {
@@ -137,6 +137,8 @@ namespace spareParts.ViewModels.Authentication
         public bool Success { get; set; }
 
         public string Message { get; set; }
+
+        public string UserID {get; set;}
     }
 
     public class SignupRequest

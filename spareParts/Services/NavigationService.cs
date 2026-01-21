@@ -34,6 +34,6 @@ public partial class NavigationService
 
     public static async Task SetRoot(string name)
     {
-        await Shell.Current.GoToAsync($"//{name}");
+        await Shell.Current.GoToAsync($"///{name}");
     }
 }

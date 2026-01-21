@@ -31,7 +31,7 @@
                        HorizontalOptions="Center" 
                        TextColor="White" />
                 
-                <Label Text="Find quality parts for your vehicle" 
+                <Label Text="Find quality parts for your needs" 
                        FontSize="14" 
                        HorizontalOptions="Center" 
                        TextColor="#8A92A6" />
@@ -51,7 +51,7 @@
                                TextColor="#F35D07" 
                                CharacterSpacing="1"/>
                         <Label x:Name="EmailLabel"
-                               Text="Admin@outlook.com" 
+                               Text="{Binding WelcomeMessage}" 
                                FontSize="18" 
                                FontAttributes="Bold"
                                TextColor="White" />

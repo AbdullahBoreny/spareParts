@@ -36,19 +36,12 @@
                 <DataTemplate>
                     <Grid Padding="20,10">
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenChatCommand}" 
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ChatsViewModel}}, Path=BindingContext.OpenChatCommand}" 
                                                   CommandParameter="{Binding .}"/>
                         </Grid.GestureRecognizers>
                         
                         <Grid ColumnDefinitions="60, *, Auto" ColumnSpacing="15">
                             <Grid Grid.Column="0">
-                                <Border StrokeShape="RoundRectangle 30" 
-                                        HeightRequest="60" 
-                                        WidthRequest="60" 
-                                        StrokeThickness="0"
-                                        BackgroundColor="#2A3547">
-                                    <Image Source="{Binding ShopImage}" Aspect="AspectFill"/>
-                                </Border>
                                 <Ellipse Fill="#00FF7F" 
                                          HeightRequest="12" 
                                          WidthRequest="12" 
@@ -98,20 +91,5 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
-        <Button Grid.Row="1"
-                Text="+"
-                FontSize="28"
-                FontAttributes="Bold"
-                TextColor="White"
-                BackgroundColor="#F35D07"
-                HeightRequest="60"
-                WidthRequest="60"
-                CornerRadius="30"
-                HorizontalOptions="End"
-                VerticalOptions="End"
-                Margin="25"
-                Shadow="{Shadow Brush=Black, Offset='0,5', Opacity=0.3}"/>
-                
     </Grid>
 </ContentPage>
