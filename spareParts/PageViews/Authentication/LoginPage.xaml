@@ -94,7 +94,7 @@
                             CornerRadius="10"
                             HeightRequest="55"
                             Margin="0,10,0,0"
-                            Command="{Binding LoginAsyncCommand}" />
+                            Command="{Binding LoginCommand}" />
 
                     <Label Text="Forgot Password?"
                            TextColor="#8899AA"

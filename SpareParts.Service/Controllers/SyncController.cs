@@ -244,6 +244,101 @@ namespace SpareParts.Service.Controllers
                 return BadRequest(new { Success = false, Message = ex.Message });
             }
         }
+
+        [HttpPost("GetShops")]
+        public IActionResult GetShops([FromBody] ShopRequest model)
+        {
+            string UserID = model.UserID;
+
+            try
+            {
+                // using (SqlConnection connection = new SqlConnection(connectionString))
+                // {
+                //     connection.Open();
+                //     using(SqlCommand command = new SqlCommand())
+                //     {
+                //         command.Connection = connection;
+                //         command.CommandType = System.Data.CommandType.Text;
+                //         command.CommandText = "SELECT ";
+                //     }
+                // }
+                return Ok(new {Success = true , Message = "No Shops Available"});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new {Success = false, Message = "Issue Occurred while retrieving the shops"});
+            }
+        }
+
+        [HttpPost("GetConversation")]
+        public IActionResult GetConversation([FromBody] ConversationRequest model)
+        {
+            string MyUserID = model.MyUserID;
+            string OtherPartyUserID = model.OtherPartyUserID;
+            List<Chat> chats = new List<Chat>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
+                        command.CommandText = "spGetConversation";
+                        command.Parameters.AddWithValue("@CurrentUserID", MyUserID);
+                        command.Parameters.AddWithValue("@OtherUserID", OtherPartyUserID);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int senderIDOrdinal = reader.GetOrdinal("SenderUserID");
+                                int MessageContentOrdinal = reader.GetOrdinal("MessageContent");
+                                int MessageCreationDateOrdinal = reader.GetOrdinal("MessageCreationDate");
+                                int IsReadOrdinal = reader.GetOrdinal("IsRead");
+                                int IsIncomingOrdinal = reader.GetOrdinal("IsIncoming");
+
+
+                                string SenderID = reader.GetString(senderIDOrdinal);
+                                string MessageContent = reader.GetString(MessageContentOrdinal);
+                                DateTime MessageCreationDate = reader.GetDateTime(MessageCreationDateOrdinal);
+                                bool IsRead = reader.GetBoolean(IsReadOrdinal);
+                                bool IsIncoming = reader.GetBoolean(IsIncomingOrdinal);
+                                chats.Add(new Chat()
+                                {
+                                    SenderID = SenderID,
+                                    MessageContent = MessageContent,
+                                    MessageCreationDate = MessageCreationDate,
+                                    IsRead = IsRead,
+                                    IsIncoming = IsIncoming  
+                                });
+                            }
+                            return Ok(new {Success = true, chats = chats});
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new {Success = false, Message = "Issue Occurred while retrieving the conversation"});
+            }
+        }
+
+        [HttpPost("SendMessage")]
+        public void SendMessage([FromBody] Chat model)
+        {
+            using(SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using(SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = "INSERT INTO Communication.Messages ()";
+                }
+            }
+        }
     }
     public class LoginRequest
     {
@@ -275,6 +370,59 @@ namespace SpareParts.Service.Controllers
         public string LastMessage {get; set;}
         public DateTime LastMessageTime {get; set;}
         public int UnreadCount {get;set;}
+    }
+
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public int StockQuantity { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime UpdatedDate { get; set; } = DateTime.Now;
+    }
+    public class ShopWithProducts
+    {
+            public int ProductCount { get; set; }
+            public double Rating { get; set; }
+            public double Distance { get; set; }
+            public List<Product> FeaturedProducts { get; set; } = new List<Product>();
+
+            public int Id {get; set;}
+            public string Name {get; set;}
+            public string Description {get; set;}
+            public string Address {get; set;}
+            public string Phone {get; set;}
+            public string Email {get; set;}
+            public bool IsActive {get; set;}
+    }
+
+    public class ShopRequest
+    {
+        public string UserID {get; set;}
+    }
+
+    public class GetShopsResponse
+    {
+        
+    }
+
+    public class ConversationRequest
+    {
+        public string MyUserID {get; set;}
+        public string OtherPartyUserID {get; set;}
+    }
+    public class Chat
+    {
+        
+        public string MessageContent { get; set; }
+        public string SenderID {get; set;}
+        public DateTime MessageCreationDate { get; set; }
+        public bool IsRead { get; set; }
+        public bool IsIncoming { get; set; }
     }
 
 }

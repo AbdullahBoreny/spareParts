@@ -27,6 +27,10 @@ namespace spareParts.ViewModels.Customer
         [ObservableProperty]
         public partial bool IsAuthenticated {get; set;}
 
+        public ApiService apiService = new ApiService();
+
+        public string UserID {get; set;}
+
         public HomeViewModel()
         {
             _authService = AuthenticationStateService.Instance;
@@ -34,6 +38,7 @@ namespace spareParts.ViewModels.Customer
             {
                 await UpdateAuthState();
                 LoadSampleShops();
+                // await getShops();
 
             });
         }
@@ -43,6 +48,7 @@ namespace spareParts.ViewModels.Customer
             await AuthenticationStateService.Instance.InitializeAsync();
             WelcomeMessage = _authService.CurrentUserName + " !";
             UserEmail = _authService.CurrentUserEmail;
+            UserID = _authService.CurrentUserID;
         }
 
         [RelayCommand]
@@ -60,7 +66,6 @@ namespace spareParts.ViewModels.Customer
             if (shop == null) return;
             await Shell.Current.Navigation.PushAsync(new ShopDetailsPage(shop));
         }
-
         public void LoadSampleShops()
         {
             Shops = new ObservableCollection<ShopWithProducts>
@@ -77,6 +82,7 @@ namespace spareParts.ViewModels.Customer
                     ProductCount = 1250,
                     Rating = 4.8,
                     Distance = 2.3,
+                    UserID = "72E0941C-17FB-4EDD-81D2-B2FED83004FA",
                     FeaturedProducts = new List<Product>
                     {
                         new Product { Name = "Brake Pads", Price = 45.99M },
@@ -96,6 +102,7 @@ namespace spareParts.ViewModels.Customer
                     ProductCount = 890,
                     Rating = 4.6,
                     Distance = 5.1,
+                    UserID = "C060063D-2620-4851-B2CB-D23BEF0ED127",
                     FeaturedProducts = new List<Product>
                     {
                         new Product { Name = "Chain Set", Price = 89.99M },
@@ -115,6 +122,7 @@ namespace spareParts.ViewModels.Customer
                     ProductCount = 2100,
                     Rating = 4.9,
                     Distance = 8.7,
+                    UserID = "CF070548-7E32-49ED-A0B2-94CCDBF0927F",
                     FeaturedProducts = new List<Product>
                     {
                         new Product { Name = "Hydraulic Pump", Price = 450.00M },
@@ -134,6 +142,7 @@ namespace spareParts.ViewModels.Customer
                     ProductCount = 650,
                     Rating = 4.7,
                     Distance = 12.4,
+                    UserID = "EF0D8BA9-6F1A-490B-B348-6DB8834984EF",
                     FeaturedProducts = new List<Product>
                     {
                         new Product { Name = "Chrome Bumper", Price = 299.99M },
@@ -153,6 +162,7 @@ namespace spareParts.ViewModels.Customer
                     ProductCount = 420,
                     Rating = 4.4,
                     Distance = 15.2,
+                    UserID = "ECA712CC-6E41-4E84-885D-35BEEEAB798C",
                     FeaturedProducts = new List<Product>
                     {
                         new Product { Name = "Propeller", Price = 199.99M },
@@ -162,6 +172,16 @@ namespace spareParts.ViewModels.Customer
                 }
             };
         }
+
+        // public async Task getShops()
+        // {
+        //     GetShopsRequest getShopsRequest = new GetShopsRequest()
+        //     {
+        //         UserID = UserID
+        //     };
+        //     string responseString = await apiService.PostAsync("GetShops", getShopsRequest);
+        //     ShopsResponse response = System.Text.Json.JsonSerializer.Deserialize<ShopsResponse>(responseString);
+        // }
 
         public async void OnContactShopClicked(object sender, EventArgs e)
         {
@@ -189,5 +209,38 @@ namespace spareParts.ViewModels.Customer
                 }
             }
         }
+        [RelayCommand]
+        public async Task ContactShop(ShopWithProducts shopWithProducts)
+        {
+            string ShopUserID = shopWithProducts.UserID;
+            string shopName = shopWithProducts.Name;
+            ChatNav chatNav = new ChatNav()
+            {
+                ContactUserID = ShopUserID,
+                ContactName = shopName
+            };
+            var parameters = new Dictionary<string, object>
+            {
+                {"ChatData" , chatNav}
+            };
+            await Shell.Current.GoToAsync("ChatPage", parameters);
+        }
+    }
+    public class GetShopsRequest
+    {
+        public string UserID {get; set;}
+    }
+
+    public class ShopsResponse
+    {
+        public bool Success {get; set;}
+        public string Message {get; set;}
+
+        public ObservableCollection<Models.Shop> ShopsList {get; set;}
+    }
+    public class ChatNav
+    {
+        public string ContactUserID {get; set;}
+        public string ContactName {get; set;}
     }
 }

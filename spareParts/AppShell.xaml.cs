@@ -22,7 +22,9 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("HomePage", typeof(HomePage));
         Routing.RegisterRoute("ProductDetails", typeof(ProductDetails));
         Routing.RegisterRoute("ProfilePage", typeof(ProfilePage));
-        Routing.RegisterRoute("ShopRegistrationPage", typeof(ShopRegistrationPage));
+        Routing.RegisterRoute("ChatPage", typeof(ChatPage));
+        Routing.RegisterRoute("ChatsPage", typeof(ChatsPage));
+
 
         CheckAuthentication();
     }
